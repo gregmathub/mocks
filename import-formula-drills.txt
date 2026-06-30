@@ -1,0 +1,259 @@
+Q: What is 3/8 + 5/12 ?
+Answer: 19/24
+Tags: Fractions
+Explain: \frac{a}{b}+\frac{c}{d} = \frac{ad+bc}{bd}
+
+Q: What is 7/9 × 3/14 ?
+Answer: 1/6
+Tags: Fractions
+Explain: \frac{a}{b} × \frac{c}{d} = \frac{ac}{bd}
+
+Q: What is 5/8 ÷ 15/16 ?
+Answer: 2/3
+Tags: Fractions
+Explain: \frac{a}{b} ÷ \frac{c}{d} = \frac{ad}{bc}
+
+Q: Which is greater: 7/11 or 9/14 ? (type '7/11' or '9/14')
+Answer: 9/14
+Tags: Fractions
+Explain: bow-tie: ad vs bc
+
+Q: Solve 6x + 12 = 30
+Answer: 3
+Tags: Equations
+Explain: factor out common term
+
+Q: Solve x(x-5)=0
+Answer: 0,5
+Tags: Equations
+Explain: Zero product property
+
+Q: Factor and solve: x² + 5x + 6 = 0
+Answer: -2,-3
+Tags: Equations
+Explain: (x+p)(x+q)=0, p+q=5, pq=6
+
+Q: Factor: x² − 49
+Answer: (x-7)(x+7)
+Tags: Equations
+Explain: difference of squares: (x−a)(x+a)
+
+Q: Expand: (3x+4)²
+Answer: 9x²+24x+16
+Tags: Equations
+Explain: (x+y)² = x²+2xy+y²
+
+Q: a odd, b even. Is a×b + a odd or even? (type odd/even)
+Answer: odd
+Tags: Numbers
+Explain: odd×even=even, even+odd=odd
+
+Q: Sum of primes between 10 and 25
+Answer: 83
+Tags: Numbers
+Explain: primes: 11,13,17,19,23
+
+Q: Is 4572 divisible by 9? (yes/no)
+Answer: yes
+Tags: Numbers
+Explain: sum digits divisible by 9
+
+Q: Remainder of 47 ÷ 6
+Answer: 5
+Tags: Numbers
+Explain: remainder < divisor
+
+Q: Number of positive factors of 72
+Answer: 12
+Tags: LCM/GCF
+Explain: prime factorization, add 1 to exponents
+
+Q: LCM of 18 and 30
+Answer: 90
+Tags: LCM/GCF
+Explain: prime factors with largest exponent
+
+Q: GCF of 48 and 60
+Answer: 12
+Tags: LCM/GCF
+Explain: prime factors with smallest exponent
+
+Q: LCM×GCF = 60×4 = ?
+Answer: 240
+Tags: LCM/GCF
+Explain: LCM(x,y)×GCF(x,y)=xy
+
+Q: Trailing zeros in 500! (enter number)
+Answer: 124
+Tags: Numbers
+Explain: count factors of 5
+
+Q: Does 7/28 terminate? (yes/no)
+Answer: yes
+Tags: Decimals
+Explain: denominator only 2s and 5s
+
+Q: Units digit of 3⁸⁷
+Answer: 7
+Tags: Numbers
+Explain: cycle: 3,9,7,1
+
+Q: Simplify: x⁵ × x⁸
+Answer: x¹³
+Tags: Exponents
+Explain: xᵃ × xᵇ = xᵃ⁺ᵇ
+
+Q: Simplify: 2⁹ ÷ 2⁴
+Answer: 32
+Tags: Exponents
+Explain: xᵃ ÷ xᵇ = xᵃ⁻ᵇ
+
+Q: Simplify: (5³)⁴
+Answer: 5¹²
+Tags: Exponents
+Explain: (xᵃ)ᵇ = xᵃᵇ
+
+Q: Simplify: 3⁵ × 4⁵
+Answer: 12⁵
+Tags: Exponents
+Explain: (xy)ᵃ = xᵃ yᵃ
+
+Q: Simplify √(25/64)
+Answer: 5/8
+Tags: Radicals
+Explain: √(x/y) = √x/√y
+
+Q: Simplify √8 × √6
+Answer: 4√3
+Tags: Radicals
+Explain: √a × √b = √(ab)
+
+Q: Solve |2x−3| = 7 (enter values, comma separated)
+Answer: 5,-2
+Tags: Absolute
+Explain: case positive and negative
+
+Q: Solve |3x+2| = |x−4| (enter values, comma)
+Answer: -3,1/2
+Tags: Absolute
+Explain: equal or opposites
+
+Q: John is 5 years older than twice Mary's age. Mary=x, John=?
+Answer: 2x+5
+Tags: Word
+Explain: 2x + 5
+
+Q: Simple interest: $500 at 4% for 3 years
+Answer: 60
+Tags: Interest
+Explain: P×r×t
+
+Q: Compound: $1000 at 5% quarterly for 2 years (nearest cent)
+Answer: 1104.49
+Tags: Interest
+Explain: A=P(1+r/n)^(nt)
+
+Q: Sum of 3 consecutive integers = 72. Smallest?
+Answer: 23
+Tags: Algebra
+Explain: x+(x+1)+(x+2)=72
+
+Q: 60 mph for 2.5h, distance?
+Answer: 150
+Tags: Rate
+Explain: D = r×t
+
+Q: Average speed: 120mi at 40, 120mi at 60
+Answer: 48
+Tags: Rate
+Explain: total distance / total time
+
+Q: John 6h, Mary 4h, together time (hours)?
+Answer: 2.4
+Tags: Work
+Explain: 1/t = 1/6 + 1/4
+
+Q: Boys:girls=3:5, total 40, boys?
+Answer: 15
+Tags: Ratios
+Explain: part = ratio part / sum × total
+
+Q: A:B=2:3, B:C=4:5, A:B:C?
+Answer: 8:12:15
+Tags: Ratios
+Explain: LCM method
+
+Q: 35% of 80
+Answer: 28
+Tags: Percent
+Explain: percent × number
+
+Q: Price $80→$100, percent increase?
+Answer: 25
+Tags: Percent
+Explain: (new-old)/old ×100
+
+Q: x is 20% greater than y, y=50, x=?
+Answer: 60
+Tags: Percent
+Explain: x = 1.2y
+
+Q: Average of 14,18,22,26
+Answer: 20
+Tags: Stats
+Explain: sum / count
+
+Q: Average of {10,15,20,25,30}
+Answer: 20
+Tags: Stats
+Explain: (first+last)/2
+
+Q: Count integers 12 to 35 inclusive
+Answer: 24
+Tags: Stats
+Explain: last-first+1
+
+Q: Weighted avg: 10 students avg80, 20 avg90
+Answer: 86.67
+Tags: Stats
+Explain: (10*80+20*90)/30
+
+Q: Median of {3,7,1,9,5,11,13}
+Answer: 7
+Tags: Stats
+Explain: order, middle
+
+Q: Bag: 4R,5B,6G. P(blue)
+Answer: 1/3
+Tags: Probability
+Explain: favorable/total
+
+Q: P(rain)=0.35, P(no rain)
+Answer: 0.65
+Tags: Probability
+Explain: 1 - P
+
+Q: P(heads & 4) with coin+die
+Answer: 1/12
+Tags: Probability
+Explain: 1/2 × 1/6
+
+Q: Triangle area base=10 height=7
+Answer: 35
+Tags: Geometry
+Explain: ½ bh
+
+Q: Right triangle legs 6 and 8, hypotenuse?
+Answer: 10
+Tags: Geometry
+Explain: a²+b²=c²
+
+Q: Circle area radius=6
+Answer: 36π
+Tags: Geometry
+Explain: πr²
+
+Q: Sum interior angles of hexagon
+Answer: 720
+Tags: Geometry
+Explain: (n−2)×180

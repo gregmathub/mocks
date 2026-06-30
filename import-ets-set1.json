@@ -1,0 +1,213 @@
+[
+ {
+  "type": "qc",
+  "passage": "x ≠ 0",
+  "quantA": "(5 + 10x²) / (2 + 2x²)",
+  "quantB": "2",
+  "answer": "A",
+  "tags": [
+   "Quant Comparison",
+   "Algebra"
+  ],
+  "explanation": "For x ≠ 0, x² > 0. Cross-multiplying (5+10x²) vs 2(2+2x²): 5+10x² vs 4+4x² → 1+6x² > 0 always. Quantity A is greater. Answer: A."
+ },
+ {
+  "type": "qc",
+  "passage": "The \"D-length\" between points (x₁,y₁) and (x₂,y₂) is the greater of |x₁−x₂| and |y₁−y₂|. Points R(−3,1), S(3,5), T(4,1).",
+  "quantA": "The D-length between points R and S",
+  "quantB": "The D-length between points R and T",
+  "answer": "B",
+  "tags": [
+   "Quant Comparison",
+   "Coordinate Geometry"
+  ],
+  "explanation": "R–S: |−3−3|=6, |1−5|=4 → 6. R–T: |−3−4|=7, |1−1|=0 → 7. Quantity B (7) > Quantity A (6). Answer: B."
+ },
+ {
+  "type": "qc",
+  "passage": "x and y are integers, and xy ≠ 0.",
+  "quantA": "xy",
+  "quantB": "0",
+  "answer": "D",
+  "tags": [
+   "Quant Comparison",
+   "Number Properties"
+  ],
+  "explanation": "Neither x nor y is 0, but signs are unknown. Same signs → xy>0; opposite signs → xy<0. Cannot be determined. Answer: D."
+ },
+ {
+  "type": "qc",
+  "passage": "x < y < z",
+  "quantA": "(x + y + z) / 3",
+  "quantB": "y",
+  "answer": "D",
+  "tags": [
+   "Quant Comparison",
+   "Statistics"
+  ],
+  "explanation": "Quantity A is the mean, Quantity B is the median of three numbers. The mean can be less than, equal to, or greater than the median. Cannot be determined. Answer: D."
+ },
+ {
+  "type": "qc",
+  "quantA": "The area enclosed by a square with side length 2",
+  "quantB": "Twice the area enclosed by an equilateral triangle with side length 2",
+  "answer": "A",
+  "tags": [
+   "Quant Comparison",
+   "Geometry"
+  ],
+  "explanation": "Square area = 2² = 4. Equilateral triangle (side 2) area = (√3/4)·4 = √3 ≈ 1.73; twice ≈ 3.46. 4 > 3.46. Answer: A."
+ },
+ {
+  "type": "qc",
+  "passage": "PQ is a diameter of the circle. Point R divides the lower semicircle into two arcs of equal length. Point S (not shown) lies on the upper semicircle, distinct from P and Q.",
+  "quantA": "The measure of angle RPS",
+  "quantB": "150°",
+  "answer": "B",
+  "tags": [
+   "Quant Comparison",
+   "Geometry"
+  ],
+  "explanation": "R is the bottom midpoint, so PR subtends a 90° arc → angle from P is 45° below the diameter. As S ranges over the upper semicircle, angle RPS stays below 135°, which is less than 150°. Answer: B."
+ },
+ {
+  "type": "mc",
+  "stem": "What is the value of 2.673285, rounded to the nearest tenth?",
+  "options": [
+   "2.6",
+   "2.7",
+   "2.67",
+   "2.68",
+   "2.673"
+  ],
+  "answer": "B",
+  "tags": [
+   "Arithmetic"
+  ],
+  "explanation": "The hundredths digit is 7 (≥5), so round the tenths digit 6 up to 7 → 2.7. Answer: B."
+ },
+ {
+  "type": "mc",
+  "stem": "A pencil holder holds 30 pencils. When a pencil is chosen at random, the probability of choosing a yellow pencil is 0.4 and the probability of choosing a yellow pencil that has an eraser is 0.3. How many yellow pencils have no erasers?",
+  "options": [
+   "1",
+   "3",
+   "4",
+   "9",
+   "12"
+  ],
+  "answer": "B",
+  "tags": [
+   "Probability"
+  ],
+  "explanation": "Yellow = 0.4×30 = 12. Yellow with eraser = 0.3×30 = 9. Without eraser = 12 − 9 = 3. Answer: B."
+ },
+ {
+  "type": "multi",
+  "stem": "Two water pumps, P and Q, working at constant rates, will fill an empty tank. Pump P alone fills it in 30 minutes. Which statements individually provide sufficient additional information to determine how long both pumps together take? Indicate all that apply.",
+  "options": [
+   "The capacity of the tank is 600 gallons.",
+   "Pump Q alone can fill 1/20 of the tank in 1 minute.",
+   "If P works alone for 5 minutes then both work together, the tank fills in a total of 15 minutes."
+  ],
+  "answer": [
+   "B",
+   "C"
+  ],
+  "tags": [
+   "Rates",
+   "Data Sufficiency"
+  ],
+  "explanation": "A gives capacity, not Q's rate — insufficient. B gives Q's rate directly. C lets you solve for Q's rate. B and C are each sufficient. Answer: B and C."
+ },
+ {
+  "type": "mc",
+  "passage": "<div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:16px 18px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:12px;\">Exhibit · U.S. maize production (millions of tonnes)</div><div style=\"display:flex;align-items:flex-end;gap:12px;\"><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">273</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:102px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2012</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">351</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:132px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2013</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">361</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:135px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2014</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">345</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:129px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2015</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">385</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:144px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2016</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">371</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#1D4ED8;height:139px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2017</div></div></div></div>",
+  "stem": "Approximately how much greater was the average annual maize production for 2013 through 2017 than the maize production for 2012?",
+  "options": [
+   "70 million",
+   "75 million",
+   "85 million",
+   "90 million",
+   "95 million"
+  ],
+  "answer": "D",
+  "tags": [
+   "Data Interpretation",
+   "Statistics"
+  ],
+  "explanation": "Avg 2013–2017 = (351+361+345+385+371)/5 = 1813/5 = 362.6. Minus 2012 (273) ≈ 89.6 ≈ 90 million. Answer: D."
+ },
+ {
+  "type": "numeric",
+  "passage": "<div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:16px 18px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:12px;\">Exhibit · U.S. maize production (millions of tonnes)</div><div style=\"display:flex;align-items:flex-end;gap:12px;\"><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">273</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:102px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2012</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">351</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:132px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2013</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">361</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:135px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2014</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">345</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:129px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2015</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">385</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:144px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2016</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">371</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#1D4ED8;height:139px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2017</div></div></div></div><div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:14px 18px;margin-top:10px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:8px;\">2017 uses · percent of production</div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:7px;\"><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Feed</span><span style=\"font-weight:700;\">39%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Ethanol & fuel</span><span style=\"font-weight:700;\">27%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Exports</span><span style=\"font-weight:700;\">16%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Food & industrial</span><span style=\"font-weight:700;\">9%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Residual</span><span style=\"font-weight:700;\">9%</span></div></div></div>",
+  "stem": "In 2017 the maize production used for ethanol and fuel was what percent of the maize production that was NOT used for exports? Give your answer to the nearest whole percent.",
+  "answer": "32",
+  "tags": [
+   "Data Interpretation",
+   "Percent"
+  ],
+  "explanation": "Not exports = 100% − 16% = 84%. Ethanol/fuel = 27%. 27/84 ≈ 0.3214 → 32%. Answer: 32%."
+ },
+ {
+  "type": "mc",
+  "passage": "<div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:16px 18px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:12px;\">Exhibit · U.S. maize production (millions of tonnes)</div><div style=\"display:flex;align-items:flex-end;gap:12px;\"><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">273</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:102px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2012</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">351</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:132px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2013</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">361</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:135px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2014</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">345</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:129px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2015</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">385</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:144px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2016</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">371</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#1D4ED8;height:139px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2017</div></div></div></div>",
+  "stem": "Which of the following is closest to the average rate of change, in tonnes per year, for maize production from 2012 to 2017?",
+  "options": [
+   "20 million",
+   "19 million",
+   "18 million",
+   "17 million",
+   "16 million"
+  ],
+  "answer": "A",
+  "tags": [
+   "Data Interpretation",
+   "Rates"
+  ],
+  "explanation": "(371 − 273) / (2017 − 2012) = 98/5 = 19.6 ≈ 20 million tonnes/year. Answer: A."
+ },
+ {
+  "type": "mc",
+  "passage": "<div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:16px 18px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:12px;\">Exhibit · U.S. maize production (millions of tonnes)</div><div style=\"display:flex;align-items:flex-end;gap:12px;\"><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">273</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:102px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2012</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">351</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:132px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2013</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">361</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:135px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2014</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">345</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:129px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2015</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">385</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#94A3B8;height:144px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2016</div></div><div style=\"flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:170px;gap:6px;\"><div style=\"font-size:12px;font-weight:700;color:#0B1F3A;\">371</div><div style=\"width:100%;max-width:44px;border-radius:5px 5px 0 0;background:#1D4ED8;height:139px;\"></div><div style=\"font-size:11px;font-weight:600;color:#64748B;\">2017</div></div></div></div><div style=\"border:1.5px solid #E2E8F0;border-radius:12px;padding:14px 18px;margin-top:10px;background:#FCFDFE;\"><div style=\"font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#64748B;margin-bottom:8px;\">2017 uses · percent of production</div><div style=\"display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:7px;\"><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Feed</span><span style=\"font-weight:700;\">39%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Ethanol & fuel</span><span style=\"font-weight:700;\">27%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Exports</span><span style=\"font-weight:700;\">16%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Food & industrial</span><span style=\"font-weight:700;\">9%</span></div><div style=\"display:flex;justify-content:space-between;font-size:13px;background:#F1F5F9;border-radius:6px;padding:7px 11px;\"><span style=\"color:#475569;\">Residual</span><span style=\"font-weight:700;\">9%</span></div></div></div>",
+  "stem": "If the mass of 1 bushel of maize is 0.0254 tonne, approximately how many bushels of the maize produced in 2017 were used for exports?",
+  "options": [
+   "2 million",
+   "9 million",
+   "59 million",
+   "2,337 million",
+   "3,944 million"
+  ],
+  "answer": "D",
+  "tags": [
+   "Data Interpretation",
+   "Unit Conversion"
+  ],
+  "explanation": "2017 production = 371M tonnes; exports = 16% → 59.36M tonnes. Bushels = 59.36M / 0.0254 ≈ 2,337 million. Answer: D."
+ },
+ {
+  "type": "mc",
+  "stem": "Which of the following integers has only two different prime factors?",
+  "options": [
+   "4",
+   "5",
+   "12",
+   "27",
+   "30"
+  ],
+  "answer": "C",
+  "tags": [
+   "Number Properties"
+  ],
+  "explanation": "4 = 2² (one prime). 5 is prime (one). 12 = 2²·3 (two primes ✓). 27 = 3³ (one). 30 = 2·3·5 (three). Answer: C."
+ },
+ {
+  "type": "short",
+  "stem": "Lists R and S consist of numbers, and R has twice as many numbers as S. The average of the numbers in R is 8, and the average of the numbers in S is 7. What is the average of the numbers in lists R and S combined? Give your answer as a fraction.",
+  "answer": "23/3",
+  "tags": [
+   "Statistics"
+  ],
+  "explanation": "Let S have n numbers (sum 7n) and R have 2n numbers (sum 16n). Combined sum = 23n over 3n numbers = 23/3. Answer: 23/3."
+ }
+]

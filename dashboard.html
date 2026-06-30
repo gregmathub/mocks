@@ -419,6 +419,7 @@ body {
     <div class="sidebar-item" onclick="showPage('test1')"><span class="icon">📝</span> Section 1 · Easy</div>
     <div class="sidebar-item" onclick="showPage('test2')"><span class="icon">📝</span> Section 2 · Medium</div>
     <div class="sidebar-item" onclick="showPage('testset1')"><span class="icon">🎓</span> ETS Official · Set 1</div>
+    <div class="sidebar-item" onclick="showPage('testset2')"><span class="icon">🎓</span> ETS Official · Set 2</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Tools</div>
@@ -621,6 +622,13 @@ body {
     </div>
     <div id="testset1Content"><div class="empty"><div class="empty-icon">🎓</div><div class="empty-title">No attempts on ETS Set 1 yet</div></div></div>
   </div>
+  <div id="page-testset2" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">ETS Official · Set 2</div>
+      <div class="page-sub">15 questions · 26 minutes · Official ETS mixed practice</div>
+    </div>
+    <div id="testset2Content"><div class="empty"><div class="empty-icon">🎓</div><div class="empty-title">No attempts on ETS Set 2 yet</div></div></div>
+  </div>
 
 </main>
 </div>
@@ -679,6 +687,15 @@ const TOPIC_MAP = {
     'Rates': [9],
     'Data Interpretation': [10,11,12,13],
     'Number Properties': [14],
+  },
+  'set2': {
+    'Quantitative Comparison': [1,2,3,4,5,6],
+    'Statistics': [3,9],
+    'Geometry': [4,6],
+    'Number Properties': [5,14],
+    'Combinatorics': [7,15],
+    'Data Interpretation': [8,9,10,11],
+    'Algebra': [12,13],
   }
 };
 
@@ -844,6 +861,7 @@ async function renderAll() {
   renderTestPage('t1', studentList, 'test1Content');
   renderTestPage('t2', studentList, 'test2Content');
   renderTestPage('set1', studentList, 'testset1Content');
+  renderTestPage('set2', studentList, 'testset2Content');
 }
 
 function renderStats(studentList, allAttempts) {
@@ -871,7 +889,7 @@ function renderRecent(allAttempts) {
   }
   tbody.innerHTML = recent.map(a => {
     const bc = scoreBadgeClass(a.score);
-    const testLabel = a.testId === 't1' ? 'Section 1' : a.testId === 't2' ? 'Section 2' : a.testId === 'set1' ? 'ETS Set 1' : a.testId;
+    const testLabel = a.testId === 't1' ? 'Section 1' : a.testId === 't2' ? 'Section 2' : a.testId === 'set1' ? 'ETS Set 1' : a.testId === 'set2' ? 'ETS Set 2' : a.testId;
     const time = new Date(a.timestamp).toLocaleDateString('en-NG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
     return `<tr>
       <td>
@@ -1202,7 +1220,7 @@ async function openDrawer(email) {
       ${sorted.map((a,i) => `
         <div class="attempt-row">
           <div class="attempt-num">${sorted.length-i}</div>
-          <div class="attempt-test">${a.testId==='t1'?'Section 1 · Easy':a.testId==='t2'?'Section 2 · Medium':a.testId==='set1'?'ETS Official · Set 1':a.testId}</div>
+          <div class="attempt-test">${a.testId==='t1'?'Section 1 · Easy':a.testId==='t2'?'Section 2 · Medium':a.testId==='set1'?'ETS Official · Set 1':a.testId==='set2'?'ETS Official · Set 2':a.testId}</div>
           <div class="attempt-score" style="color:${a.score>=60?'#34D399':a.score>=40?'#FCD34D':'#FB7185'};">${a.score}%</div>
           <div class="attempt-time">${formatTime(a.timeUsed)}</div>
           <div style="font-size:10px;color:var(--muted);">${new Date(a.timestamp).toLocaleDateString('en-NG',{day:'numeric',month:'short'})}</div>
@@ -1255,7 +1273,7 @@ async function exportCSV() {
   const rows = [['Name','Email','Tier','Test','Score','Correct','Wrong','TimeUsed(s)','Date']];
   for (const s of Object.values(data)) {
     for (const a of s.attempts) {
-      rows.push([s.name, s.email, s.tier||'free', a.testId==='t1'?'Section1-Easy':a.testId==='t2'?'Section2-Medium':a.testId==='set1'?'ETS-Set1':a.testId, a.score, a.correct||'', a.wrong||'', a.timeUsed||'', new Date(a.timestamp).toISOString().split('T')[0]]);
+      rows.push([s.name, s.email, s.tier||'free', a.testId==='t1'?'Section1-Easy':a.testId==='t2'?'Section2-Medium':a.testId==='set1'?'ETS-Set1':a.testId==='set2'?'ETS-Set2':a.testId, a.score, a.correct||'', a.wrong||'', a.timeUsed||'', new Date(a.timestamp).toISOString().split('T')[0]]);
     }
   }
   const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');

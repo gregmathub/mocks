@@ -228,7 +228,7 @@ function toast(msg){ var t=document.createElement("div"); t.className="toast"; t
 function scoreCol(p){ return p>=70?"var(--green)":p>=50?"var(--teal2)":p>=40?"var(--gold)":"var(--rose)"; }
 function closeModal(){ el("modalRoot").innerHTML=""; }
 function activeClassObj(){ return STATE.classes.find(function(c){return c._id===STATE.activeClass;})||null; }
-function typeName(t){ return ({mc:"Multiple choice",multi:"Multiple answer",numeric:"Numeric entry",qc:"Quantitative comparison"})[t]||t; }
+function typeName(t){ return ({mc:"Multiple choice",multi:"Multiple answer",numeric:"Numeric entry",short:"Short answer",qc:"Quantitative comparison"})[t]||t; }
 
 function classPicker(){
   if (!STATE.classes.length) return "";
@@ -336,7 +336,7 @@ async function openMockEditor(id){
 function blankQ(type){
   var q = { type:type, stem:"", explanation:"", tags:[], passage:"" };
   if (type==="mc"||type==="multi"){ q.options=["","","",""]; q.answer = type==="multi"?[]:0; }
-  else if (type==="numeric"){ q.answer=""; }
+  else if (type==="numeric"||type==="short"){ q.answer=""; }
   else if (type==="qc"){ q.quantA=""; q.quantB=""; q.answer=0; }
   return q;
 }
@@ -352,12 +352,13 @@ function renderEditor(){
         '</select></div>'+
         '<div class="field" style="flex:.6;"><label class="lab">Time (min)</label><input class="inp" id="eTime" type="number" min="0" value="'+(EDIT.timeLimit||0)+'"></div></div>'+
       '<div class="field"><label class="lab">Description <span class="muted" style="text-transform:none;font-weight:400;">(shown to students)</span></label><input class="inp" id="eDesc" value="'+esc(EDIT.desc)+'" placeholder="Short description"></div>'+
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin:18px 0 12px;"><div class="lab" style="margin:0;">Questions ('+EDIT.questions.length+')</div></div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin:18px 0 12px;"><div class="lab" style="margin:0;">Questions ('+EDIT.questions.length+')</div><button class="btn sm" onclick="openImport()">⬆ Bulk import</button></div>'+
       '<div id="qList">'+qs+'</div>'+
       '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">'+
         '<button class="btn sm" onclick="addQ(\'mc\')">＋ Multiple choice</button>'+
         '<button class="btn sm" onclick="addQ(\'multi\')">＋ Multiple answer</button>'+
         '<button class="btn sm" onclick="addQ(\'numeric\')">＋ Numeric entry</button>'+
+        '<button class="btn sm" onclick="addQ(\'short\')">＋ Short answer</button>'+
         '<button class="btn sm" onclick="addQ(\'qc\')">＋ Quant comparison</button></div>'+
     '</div>'+
     '<div class="modal-foot"><span class="muted" style="margin-right:auto;font-size:12px;align-self:center;">Tip: use $x^2$ or \\(\\frac{a}{b}\\) for math.</span><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveMockFromEditor()">Save mock</button></div>'+
@@ -371,9 +372,12 @@ function qEditor(q,i){
            '<div class="field"><label class="lab">Quantity B</label><input class="inp" data-q="'+i+'" data-f="quantB" value="'+esc(q.quantB||"")+'"></div></div>'+
            '<div class="field"><label class="lab">Correct answer</label><select class="sel" data-q="'+i+'" data-f="answer-int">'+
              ['Quantity A is greater','Quantity B is greater','The two quantities are equal','Cannot be determined'].map(function(o,k){return '<option value="'+k+'"'+(q.answer===k?" selected":"")+'>'+o+'</option>';}).join("")+'</select></div>';
-  } else if (q.type==="numeric"){
+  } else if (q.type==="numeric" || q.type==="short"){
+    var aLabel = q.type==="short" ? "Correct answer (text)" : "Correct answer (number)";
+    var aPh = q.type==="short" ? "e.g. 19/24  or  x¹³  or  odd" : "e.g. 42 or 3.5";
+    var hint = q.type==="short" ? '<div class="muted" style="font-size:11.5px;margin-top:5px;">Matching ignores case &amp; spaces. For several values use commas, e.g. <b>5,-2</b> (any order accepted).</div>' : '';
     body = '<div class="field"><label class="lab">Question</label><textarea class="ta" data-q="'+i+'" data-f="stem" placeholder="Enter the question…">'+esc(q.stem||"")+'</textarea></div>'+
-           '<div class="field" style="max-width:260px;"><label class="lab">Correct answer (number)</label><input class="inp" data-q="'+i+'" data-f="answer" value="'+esc(q.answer||"")+'" placeholder="e.g. 42 or 3.5"></div>';
+           '<div class="field" style="max-width:320px;"><label class="lab">'+aLabel+'</label><input class="inp" data-q="'+i+'" data-f="answer" value="'+esc(q.answer||"")+'" placeholder="'+aPh+'">'+hint+'</div>';
   } else {
     var multi = q.type==="multi";
     body = '<div class="field"><label class="lab">Question</label><textarea class="ta" data-q="'+i+'" data-f="stem" placeholder="Enter the question…">'+esc(q.stem||"")+'</textarea></div>'+
@@ -426,6 +430,144 @@ async function saveMockFromEditor(){
   closeModal(); await refreshAll(); nav(STATE.view==="overview"?"overview":"mocks"); toast("Mock saved ✓");
 }
 window.openMockEditor=openMockEditor;window.addQ=addQ;window.delQ=delQ;window.moveQ=moveQ;window.addOpt=addOpt;window.delOpt=delOpt;window.markCorrect=markCorrect;window.saveMockFromEditor=saveMockFromEditor;
+
+/* ============ BULK IMPORT ============ */
+var IMPORT_GUIDE =
+"Separate each question with a BLANK LINE.\n\n"+
+"— MULTIPLE CHOICE —\n"+
+"Q: If 3x + 7 = 22, what is x?\n"+
+"A) 3\n"+
+"*B) 5\n"+
+"C) 7\n"+
+"D) 15\n"+
+"Tags: Algebra\n"+
+"Explain: 3x = 15, so x = 5.\n\n"+
+"(mark the correct option with * ,\n"+
+" or add a line:  Answer: B)\n\n"+
+"— MULTIPLE ANSWER —\n"+
+"Q: Which are prime?\n"+
+"*A) 2\n"+
+"B) 4\n"+
+"*C) 5\n"+
+"(mark every correct option with *)\n\n"+
+"— NUMERIC / SHORT ANSWER —\n"+
+"Q: What is 12 x 12?\n"+
+"Answer: 144\n"+
+"(no options = typed answer.\n number => numeric; anything\n else like 19/24 or 'odd' =>\n short answer, case/space-\n insensitive, commas = list)\n\n"+
+"— QUANT COMPARISON —\n"+
+"QC: given x > 0\n"+
+"Quantity A: x^2\n"+
+"Quantity B: x\n"+
+"Answer: D\n"+
+"(A=A greater, B=B greater,\n C=equal, D=cannot tell)\n\n"+
+"Math: use $x^2$ or \\(\\frac{a}{b}\\).\n"+
+"HTML tags work too (<b>, <img>, <table>).\n\n"+
+"— ADVANCED —\nPaste a JSON array of question\nobjects to import exhibits/charts\nexactly (see the ETS Set 1 file).";
+
+function parseImport(text){
+  var t = String(text||"").trim();
+  if(t.charAt(0)==="[" || t.charAt(0)==="{"){
+    try{
+      var arr = JSON.parse(t); if(!Array.isArray(arr)) arr=[arr];
+      return { questions: arr.map(normalizeImportedQ), errors:[] };
+    }catch(e){ return { questions:[], errors:["JSON error: "+e.message] }; }
+  }
+  return parseBank(text);
+}
+function normalizeImportedQ(o){
+  var t=o.type||"mc", map={A:0,B:1,C:2,D:3};
+  var q={ type:t, stem:o.stem||"", passage:o.passage||"", explanation:o.explanation||"", tags:o.tags||[] };
+  if(t==="qc"){ q.quantA=o.quantA||""; q.quantB=o.quantB||""; q.answer=typeof o.answer==="number"?o.answer:(map[String(o.answer).toUpperCase()]||0); }
+  else if(t==="numeric"||t==="short"){ q.answer=o.answer!=null?String(o.answer):""; }
+  else { q.options=o.options||[]; if(t==="multi"){ var aa=Array.isArray(o.answer)?o.answer:[]; q.answer=aa.map(function(v){ return typeof v==="number"?v:map[String(v).toUpperCase()]; }).filter(function(n){return n!=null;}); } else { q.answer = typeof o.answer==="number"?o.answer:(map[String(o.answer).toUpperCase()]||0); } }
+  return q;
+}
+function parseBank(text){
+  var blocks = String(text||"").replace(/\r/g,"").split(/\n\s*\n/);
+  var out=[], errs=[];
+  blocks.forEach(function(block, bi){
+    var lines = block.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    if(!lines.length) return;
+    var first = lines[0];
+    var isQC = /^qc\s*[:.\)]/i.test(first);
+    var stem = first.replace(/^(qc|q)\s*[:.\)]\s*/i,"").replace(/^\d+\s*[\.\)]\s*/,"");
+    var q = { type:isQC?"qc":"mc", stem:stem, tags:[], explanation:"", passage:"" };
+    var options=[], correct=[], quantA="", quantB="", qcAns=null, numAns=null;
+    for(var i=1;i<lines.length;i++){
+      var ln=lines[i];
+      var mOpt = ln.match(/^(\*?)\s*\(?([A-Za-z])\)?\s*[\)\.]\s*(.+)$/);
+      if(/^tags?\s*:/i.test(ln)){ q.tags = ln.replace(/^tags?\s*:/i,"").split(",").map(function(s){return s.trim();}).filter(Boolean); }
+      else if(/^(explanation|explain)\s*:/i.test(ln)){ q.explanation = ln.replace(/^(explanation|explain)\s*:/i,"").trim(); }
+      else if(/^passage\s*:/i.test(ln)){ q.passage = ln.replace(/^passage\s*:/i,"").trim(); }
+      else if(/^quantity\s*a\s*:/i.test(ln)){ quantA = ln.replace(/^quantity\s*a\s*:/i,"").trim(); }
+      else if(/^quantity\s*b\s*:/i.test(ln)){ quantB = ln.replace(/^quantity\s*b\s*:/i,"").trim(); }
+      else if(/^answer\s*:/i.test(ln)){
+        var av = ln.replace(/^answer\s*:/i,"").trim();
+        if(isQC){ qcAns=av; }
+        else if(/^[A-Za-z](\s*,\s*[A-Za-z])*$/.test(av)){ av.split(",").forEach(function(L){ correct.push(L.trim().toUpperCase()); }); }
+        else { numAns=av; }
+      }
+      else if(mOpt && !isQC){ if(mOpt[1]==="*") correct.push(mOpt[2].toUpperCase()); options.push(mOpt[3].trim()); }
+      else { q.stem += " " + ln; }
+    }
+    if(isQC){
+      q.type="qc"; q.quantA=quantA; q.quantB=quantB;
+      var map={A:0,B:1,C:2,D:3}; q.answer = map[(qcAns||"D").toUpperCase()]!=null ? map[(qcAns||"D").toUpperCase()] : 3;
+      if(!quantA||!quantB) errs.push("Q"+(bi+1)+": quant comparison missing Quantity A or B.");
+    } else if(options.length===0){
+      var isNum = numAns!=null && /^-?\d+(\.\d+)?$/.test(String(numAns).replace(/[, ]/g,""));
+      q.type = isNum ? "numeric" : "short";
+      q.answer = numAns!=null?numAns:"";
+      if(numAns==null) errs.push("Q"+(bi+1)+": no options and no Answer line.");
+    } else {
+      var idxs = correct.map(function(L){ return L.charCodeAt(0)-65; }).filter(function(n,i,a){ return n>=0 && n<options.length && a.indexOf(n)===i; });
+      if(!idxs.length){ errs.push("Q"+(bi+1)+": no correct option marked (use * or Answer:)."); idxs=[0]; }
+      q.options = options;
+      if(idxs.length>1){ q.type="multi"; q.answer=idxs; } else { q.type="mc"; q.answer=idxs[0]; }
+    }
+    out.push(q);
+  });
+  return { questions:out, errors:errs };
+}
+function openImport(){
+  var ov=document.createElement("div"); ov.className="overlay"; ov.id="importOverlay"; ov.style.zIndex="300";
+  ov.onclick=function(e){ if(e.target===ov) closeImport(); };
+  ov.innerHTML='<div class="modal wide">'+
+    '<div class="modal-head"><h3>Bulk import questions</h3><button class="x" onclick="closeImport()">×</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="muted" style="font-size:13px;margin-bottom:12px;">Paste a whole question bank below \u2014 separate each question with a <b>blank line</b>, mark the correct option with <b>*</b>. Click <b>Preview</b> to check, then <b>Add</b>.</div>'+
+      '<div class="row" style="align-items:stretch;">'+
+        '<div class="field" style="flex:1.35;margin:0;"><label class="lab">Paste here</label><textarea class="ta" id="bulkText" style="min-height:320px;font-family:var(--mono);font-size:13px;" placeholder="Q: If 3x + 7 = 22, what is x?&#10;A) 3&#10;*B) 5&#10;C) 7&#10;D) 15&#10;Tags: Algebra&#10;Explain: 3x = 15, so x = 5."></textarea></div>'+
+        '<div class="field" style="flex:1;margin:0;"><label class="lab">Format guide</label><div style="background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--muted);white-space:pre-wrap;height:320px;overflow:auto;">'+esc(IMPORT_GUIDE)+'</div></div>'+
+      '</div>'+
+      '<div id="importPreview" style="font-size:12.5px;margin-top:12px;"></div>'+
+    '</div>'+
+    '<div class="modal-foot"><button class="btn" onclick="closeImport()">Cancel</button><button class="btn" onclick="previewImport()">Preview</button><button class="btn primary" onclick="doImport()">Add questions</button></div>';
+  document.body.appendChild(ov);
+  document.getElementById("bulkText").focus();
+}
+function closeImport(){ var o=document.getElementById("importOverlay"); if(o) o.remove(); }
+function previewImport(){
+  var r=parseImport(document.getElementById("bulkText").value);
+  var pv=document.getElementById("importPreview");
+  if(!r.questions.length){ pv.innerHTML='<span style="color:var(--rose);font-weight:600;">No questions detected \u2014 check the format (blank line between questions).</span>'; return; }
+  var types={}; r.questions.forEach(function(q){ types[q.type]=(types[q.type]||0)+1; });
+  var summary=Object.keys(types).map(function(t){ return types[t]+" "+typeName(t).toLowerCase(); }).join(", ");
+  pv.innerHTML='<div style="color:var(--green);font-weight:700;">\u2713 '+r.questions.length+' question(s) detected</div>'+
+    '<div class="muted" style="margin-top:3px;">'+summary+'</div>'+
+    (r.errors.length?'<div style="color:var(--gold);margin-top:8px;">\u26a0 '+r.errors.map(esc).join("<br>\u26a0 ")+'</div>':'');
+}
+function doImport(){
+  var r=parseImport(document.getElementById("bulkText").value);
+  if(!r.questions.length){ toast("No questions detected \u2014 check the format"); return; }
+  syncEditorDOM();
+  if(EDIT.questions.length===1){ var q0=EDIT.questions[0]; var empty=!(q0.stem||"").trim() && (!q0.options||q0.options.every(function(o){return !(o||"").trim();})); if(empty) EDIT.questions=[]; }
+  EDIT.questions=EDIT.questions.concat(r.questions);
+  closeImport(); renderEditor();
+  var lst=el("qList"); if(lst) lst.scrollTop=lst.scrollHeight;
+  toast("Imported "+r.questions.length+" question(s)"+(r.errors.length?" \u00b7 "+r.errors.length+" warning(s)":""));
+}
+window.openImport=openImport;window.closeImport=closeImport;window.previewImport=previewImport;window.doImport=doImport;
 
 /* ============ ASSIGN ============ */
 async function viewAssign(){

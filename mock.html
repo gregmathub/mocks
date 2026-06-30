@@ -262,10 +262,12 @@ function render() {
     html += '<div class="qc"><div><div class="lab">Quantity A</div><div class="val">' + (q.quantA || "") + '</div></div>' +
             '<div><div class="lab">Quantity B</div><div class="val">' + (q.quantB || "") + "</div></div></div>";
     html += renderOpts(q, qcOptions(), false);
-  } else if (q.type === "numeric") {
+  } else if (q.type === "numeric" || q.type === "short") {
     html += '<div class="stem">' + (q.stem || "") + "</div>";
     var v = answers[cur] != null ? esc(String(answers[cur])) : "";
-    html += '<div class="numbox"><input id="numIn" type="text" inputmode="decimal" placeholder="Enter answer" value="' + v + '" ' +
+    var ph = q.type === "short" ? "Type your answer" : "Enter answer";
+    var im = q.type === "short" ? "" : 'inputmode="decimal" ';
+    html += '<div class="numbox"><input id="numIn" type="text" ' + im + 'placeholder="' + ph + '" value="' + v + '" ' +
             (reviewing ? "disabled" : 'oninput="setNumeric(this.value)"') + '></div>';
   } else {
     html += '<div class="stem">' + (q.stem || "") + "</div>";
@@ -351,10 +353,26 @@ function isCorrect(i) {
     if (isNaN(ua) || isNaN(ca)) return String(a).trim() === String(q.answer).trim();
     return Math.abs(ua - ca) < 1e-6;
   }
+  if (q.type === "short") {
+    if (a == null || a === "") return false;
+    return matchShort(a, q.answer);
+  }
   return a === q.answer;
 }
+// forgiving text compare: case-insensitive, spaces removed, order-independent for comma/semicolon lists.
+function normShort(s) { return String(s == null ? "" : s).trim().toLowerCase().replace(/\s+/g, ""); }
+function matchShort(user, expected) {
+  var u = normShort(user), e = normShort(expected);
+  if (u === e) return true;
+  if (e.indexOf(",") > -1 || e.indexOf(";") > -1) {
+    var ep = e.split(/[,;]/).filter(Boolean).sort();
+    var up = u.split(/[,;]/).filter(Boolean).sort();
+    if (ep.length === up.length && ep.every(function (v, i) { return v === up[i]; })) return true;
+  }
+  return false;
+}
 function correctLabel(q) {
-  if (q.type === "numeric") return "Answer: " + q.answer;
+  if (q.type === "numeric" || q.type === "short") return "Answer: " + q.answer;
   if (q.type === "multi") return "Correct: " + (q.answer || []).map(function (i) { return String.fromCharCode(65 + i); }).join(", ");
   var opts = q.type === "qc" ? qcOptions() : (q.options || []);
   return "Answer: " + String.fromCharCode(65 + q.answer) + (opts[q.answer] ? " · " + stripTags(opts[q.answer]) : "");
