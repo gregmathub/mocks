@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRE Quantitative Reasoning · FREESTUDY</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+:root{
+  --navy:#0B1F3A;--navy-mid:#1A3558;--blue:#1D4ED8;--blue-h:#1E40AF;
+  --teal:#0D9488;--teal-l:#2DD4BF;--bg:#EEF1F6;--panel:#FFFFFF;--off:#F7F9FC;
+  --qc:#F0F4FA;--bdr:#C9D3E0;--bdrl:#E2E8F0;--txt:#1E2A3B;--muted:#5A6878;
+  --serif:'Source Serif 4','Times New Roman',serif;
+  --sans:'DM Sans','Helvetica Neue',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+sup,sub{line-height:0}
+sup{font-size:0.72em;vertical-align:super;display:inline!important}
+sub{font-size:0.72em;vertical-align:sub;display:inline!important}
+.opt-label sup,.opt-label sub,.qc-val sup,.qc-val sub,.explanation sup,.explanation sub,.stimulus sup,.stimulus sub{display:inline!important;font-size:0.72em;line-height:0}
+.opt-label sup{vertical-align:super}
+.opt-label sub{vertical-align:sub}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);display:flex;flex-direction:column;min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;border-bottom:3px solid var(--teal);position:sticky;top:0;z-index:50}
+.topbar-center{position:absolute;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none}
+.topbar-center .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7A96BC;display:block}
+.topbar-center .ttl{font-size:13px;font-weight:600;color:#fff}
+.topbar-center .ttl span{color:#CBD8EC;font-weight:400}
+.timer{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:6px 14px;letter-spacing:.06em;font-variant-numeric:tabular-nums;min-width:90px;justify-content:center;color:#fff}
+.timer.warn{color:#FCA5A5;border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.1)}
+
+/* PROGRESS STRIP */
+.pstrip{background:var(--navy-mid);padding:7px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.06)}
+.plbl{font-size:11px;color:#7A96BC;font-weight:500;white-space:nowrap}
+.pdots{display:flex;gap:3px;flex-wrap:wrap}
+.dot{width:20px;height:20px;border-radius:3px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-size:9px;font-weight:600;color:#7A96BC;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
+.dot:hover{background:rgba(255,255,255,.15);color:#fff}
+.dot.cur{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 0 2px rgba(29,78,216,.3)}
+.dot.ans{background:var(--teal);border-color:var(--teal);color:#fff}
+.dot.flag{background:#D97706;border-color:#D97706;color:#fff}
+.dot.ok{background:#16A34A;border-color:#16A34A;color:#fff}
+.dot.bad{background:#DC2626;border-color:#DC2626;color:#fff}
+
+/* MAIN */
+.main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:22px 18px 96px}
+
+/* Q HEADER */
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.qbadge{font-size:13px;font-weight:700;color:var(--navy);background:var(--bdrl);border-radius:20px;padding:5px 16px;letter-spacing:.03em}
+.qtag{font-size:11px;background:var(--off);border:1.5px solid var(--bdr);border-radius:12px;padding:3px 12px;color:var(--muted);font-weight:500}
+.flagbtn{background:none;border:1.5px solid var(--bdr);border-radius:6px;padding:5px 12px;font-size:11.5px;color:var(--muted);cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;transition:all .15s}
+.flagbtn:hover,.flagbtn.on{border-color:#D97706;color:#D97706;background:#FFFBEB}
+
+/* DIRECTIONS */
+.dir{background:#F0F7FF;border:1px solid #BFDBFE;border-radius:6px;padding:10px 16px;font-size:12.5px;color:#1E40AF;margin-bottom:18px;line-height:1.55}
+
+/* PANEL */
+.qpanel{background:var(--panel);border:1px solid var(--bdr);border-radius:8px;padding:28px 32px;min-height:400px}
+
+/* STIMULUS */
+.stimulus{font-family:var(--serif);font-size:15.5px;line-height:1.75;background:var(--off);border-left:3px solid var(--teal);padding:12px 16px;border-radius:0 5px 5px 0;margin-bottom:20px}
+
+/* QC */
+.qc-wrap{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--bdr);border-radius:6px;overflow:hidden;margin-bottom:22px;background:var(--qc)}
+.qc-col:first-child{border-right:2px solid var(--bdr)}
+.qc-head{background:var(--navy-mid);color:#C5D5EB;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:10px;border-bottom:2px solid var(--bdr)}
+.qc-val{padding:26px 16px;text-align:center;font-family:var(--serif);font-size:19px;line-height:1.5;color:var(--txt);min-height:90px;display:flex;align-items:center;justify-content:center}
+
+/* OPTIONS */
+.options{list-style:none;display:flex;flex-direction:column;gap:8px}
+.opt-label{display:flex;align-items:center;gap:14px;padding:12px 18px;border:1.5px solid var(--bdrl);border-radius:6px;cursor:pointer;font-size:14.5px;font-family:var(--serif);transition:all .12s;background:var(--off);user-select:none}
+.opt-label:hover{background:#EFF6FF;border-color:#93C5FD}
+.opt-label input{display:none}
+.opt-circle{width:24px;height:24px;border-radius:50%;border:2px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--sans);color:var(--muted);background:#fff;transition:all .12s}
+.opt-square{width:20px;height:20px;border-radius:4px;border:2px solid var(--bdr);flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.opt-key{font-weight:700;font-family:var(--sans);font-size:13.5px;flex-shrink:0}
+.opt-label.sel{background:#EFF6FF;border-color:#3B82F6;color:#1D40AF}
+.opt-label.sel .opt-circle{background:var(--blue);border-color:var(--blue);color:#fff}
+.opt-label.sel .opt-square{background:var(--blue);border-color:var(--blue)}
+.opt-label.sel .opt-square::after{content:'';width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px);display:block}
+.opt-label.ok{background:#ECFDF5;border-color:#6EE7B7;color:#064E3B}
+.opt-label.bad{background:#FEF2F2;border-color:#FCA5A5;color:#7F1D1D}
+
+/* NUMERIC */
+.nwrap{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+.nlbl{font-size:12px;color:var(--muted);font-weight:500}
+.ninput{width:150px;height:42px;border:2px solid var(--bdr);border-radius:5px;padding:0 14px;font-size:17px;font-family:var(--serif);text-align:center;background:var(--off);outline:none;transition:border-color .15s}
+.ninput:focus{border-color:var(--blue);background:#fff}
+.fwrap{display:inline-flex;flex-direction:column;align-items:center;gap:2px;margin-top:6px}
+.finput{width:110px;height:38px;border:2px solid var(--bdr);border-radius:5px;padding:0 8px;font-size:16px;font-family:var(--serif);text-align:center;background:var(--off);outline:none;transition:border-color .15s}
+.finput:focus{border-color:var(--blue);background:#fff}
+.fline{width:110px;height:2.5px;background:var(--txt);border-radius:2px}
+
+/* DIAGRAM */
+.diagram-wrap{display:flex;justify-content:center;padding:14px 0 10px}
+.diagram-wrap svg{overflow:visible}
+
+/* DATA TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px}
+.data-table th{background:var(--navy-mid);color:#C5D5EB;padding:8px 12px;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-align:left;border:1px solid #2A4A6E}
+.data-table td{padding:7px 12px;border:1px solid var(--bdrl);font-family:var(--serif);font-size:13.5px}
+.data-table tr:nth-child(even) td{background:var(--off)}
+
+/* CHART */
+.chart-outer{border:1.5px solid var(--bdr);border-radius:6px;overflow:hidden;margin-bottom:20px}
+.chart-title{background:var(--navy);color:#C5D5EB;font-size:13px;font-weight:600;text-align:center;padding:10px 16px}
+.chart-body{padding:14px 10px 36px;background:var(--off)}
+.stem-chart{display:flex;align-items:flex-end;gap:6px;height:240px;position:relative}
+.chart-baseline{position:absolute;bottom:28px;left:0;right:0;height:2px;background:var(--bdr)}
+.stem-col{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;position:relative}
+.stem-values{display:flex;flex-direction:column;align-items:center;background:#3D6A9E;border-radius:3px 3px 0 0;padding:4px 4px 2px;gap:1px;min-width:36px}
+.stem-val{font-size:9px;color:#E2F0FF;font-family:var(--sans);font-weight:500;white-space:nowrap}
+.stem-label{position:absolute;bottom:-30px;font-size:8.5px;color:var(--muted);font-weight:600;text-align:center;width:100%;line-height:1.3}
+
+/* EXPLANATION */
+.explanation{display:none;margin-top:18px;padding:14px 18px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:6px;font-size:13.5px;line-height:1.7;color:#14532D}
+.explanation.show{display:block}
+
+/* NOTE BOX */
+.note-box{background:#FFFBEB;border:1px solid #FCD34D;border-radius:5px;padding:8px 14px;font-size:12.5px;color:#78350F;margin-bottom:16px}
+
+/* FRAC INLINE */
+.frac-inline{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;font-family:var(--serif);line-height:1.1}
+.frac-inline span{font-size:.82em;text-align:center}
+.frac-inline .fbar{width:100%;min-width:18px;height:1.5px;background:currentColor}
+
+/* BOTTOM NAV */
+.botnav{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--bdr);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:20;box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.navctr{font-size:12.5px;color:var(--muted);font-weight:500;text-align:center}
+.btn{font-family:var(--sans);font-size:13.5px;font-weight:600;padding:10px 22px;border-radius:6px;border:none;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 2px 6px rgba(29,78,216,.25)}
+.btn-p:hover{background:var(--blue-h)}
+.btn-s{background:var(--off);color:var(--txt);border:1.5px solid var(--bdr)}
+.btn-s:hover{background:var(--bdrl)}
+.btn-d{background:#DC2626;color:#fff}
+.btn-d:hover{background:#B91C1C}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* SCORE */
+.score-scr{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px}
+.score-scr.show{display:flex}
+.sbig{font-size:72px;font-weight:800;color:var(--navy);line-height:1}
+.ssub{font-size:14px;color:var(--muted);margin:6px 0 20px}
+.sbar-o{width:360px;max-width:90vw;height:12px;background:var(--bdrl);border-radius:6px;overflow:hidden;margin-bottom:24px}
+.sbar-i{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:6px;transition:width 1s ease}
+.sstats{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
+.sval{font-size:30px;font-weight:800;color:var(--navy)}
+.sval.g{color:#16A34A}.sval.r{color:#DC2626}
+.slbl{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+
+/* FOOTER */
+.pgfoot{background:var(--navy);text-align:center;padding:22px 16px 80px;border-top:1px solid var(--navy-mid)}
+.pgfoot .ft{font-size:11.5px;color:#7A96BC;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 4px}
+.pgfoot a{color:var(--teal-l);font-size:11.5px;text-decoration:none}
+
+@media(max-width:640px){
+  .qpanel{padding:16px 12px}
+  .main{padding:14px 8px 90px}
+  .qc-val{font-size:15px;padding:16px 8px}
+  .sbig{font-size:52px}
+  .botnav{padding:10px 12px;gap:6px}
+  .btn{padding:9px 14px;font-size:12px}
+}
+
+/* ── LOGIN MODAL ── */
+.login-overlay {
+  position: fixed; inset: 0;
+  background: rgba(7,19,31,0.92);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.login-card {
+  background: #0F2336;
+  border: 1px solid #1E3A52;
+  border-radius: 18px;
+  padding: 36px 40px;
+  width: 100%; max-width: 420px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+.login-logo {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+}
+.login-logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #0D9488, #1D4ED8);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.login-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; letter-spacing: -0.3px; }
+.login-sub { font-size: 13px; color: #6B8BAA; margin-bottom: 28px; line-height: 1.5; }
+.login-field { margin-bottom: 16px; }
+.login-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #6B8BAA; margin-bottom: 6px; display: block; font-family: var(--sans); }
+.login-input {
+  width: 100%; padding: 12px 16px;
+  background: #142B42; border: 1.5px solid #1E3A52;
+  border-radius: 10px; font-size: 14px; color: #E2EAF4;
+  font-family: var(--sans); outline: none; transition: border-color 0.15s;
+}
+.login-input:focus { border-color: #2DD4BF; }
+.login-input::placeholder { color: #3A5570; }
+.login-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #0D9488, #1D4ED8);
+  border: none; border-radius: 10px; color: #fff;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+  cursor: pointer; font-family: var(--sans);
+  margin-top: 8px; transition: opacity 0.15s;
+}
+.login-btn:hover { opacity: 0.9; }
+.login-note { font-size: 11px; color: #3A5570; text-align: center; margin-top: 16px; line-height: 1.5; }
+.login-error { font-size: 12px; color: #FB7185; margin-top: 6px; display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">📚</div>
+      <div>
+        <div style="font-weight:800;font-size:14px;letter-spacing:1px;color:#fff;text-transform:uppercase;">FreeStudy Hub</div>
+        <div style="font-size:9px;letter-spacing:2px;color:#2DD4BF;text-transform:uppercase;font-weight:400;">Learn Free. Go Further.</div>
+      </div>
+    </div>
+    <div class="login-title">Start Your Mock Test</div>
+    <div class="login-sub">Enter your details so your instructor can track your progress and give personalised feedback.</div>
+    <div class="login-field">
+      <label class="login-label" for="loginName">Full Name</label>
+      <input class="login-input" id="loginName" type="text" placeholder="e.g. Amaka Okafor" autocomplete="name">
+    </div>
+    <div class="login-field">
+      <label class="login-label" for="loginEmail">Email Address</label>
+      <input class="login-input" id="loginEmail" type="email" placeholder="e.g. amaka@gmail.com" autocomplete="email">
+      <div class="login-error" id="loginError">Please enter a valid email address.</div>
+    </div>
+    <button class="login-btn" onclick="submitLogin()">Begin Test →</button>
+    <div class="login-note">🔒 Your data is only shared with your FreeStudy Hub instructor, Leonard Nwosu.</div>
+  </div>
+</div>
+
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 44" width="26" height="30">
+      <circle cx="19" cy="6" r="5.5" fill="#2DD4BF"/>
+      <path d="M12,14 Q19,10 26,14 L24,23 L14,23 Z" fill="#2DD4BF"/>
+      <path d="M7,21 Q13,17 19,21 L19,32 Q13,30 7,32 Z" fill="#2DD4BF"/>
+      <path d="M19,21 Q25,17 31,21 L31,32 Q25,30 19,32 Z" fill="#2DD4BF"/>
+    </svg>
+    <div style="display:flex;flex-direction:column;line-height:1.2;">
+      <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;letter-spacing:1.5px;color:#FFFFFF;text-transform:uppercase;line-height:1.1;">FreeStudy Hub</div>
+      <div style="font-family:'DM Sans',sans-serif;font-weight:400;font-size:7px;letter-spacing:1.8px;color:#2DD4BF;text-transform:uppercase;">Learn Free. Go Further.</div>
+    </div>
+  </div>
+  </div>
+  <div class="topbar-center">
+    <span class="lbl">GRE Quantitative Reasoning</span>
+    <div class="ttl">Section 1: Easy <span>&nbsp;· 20 Questions</span></div>
+  </div>
+  <div class="timer" id="timerBox">⏱ <span id="timerTxt">35:00</span></div>
+</header>
+
+<div class="pstrip">
+  <div class="plbl">Q <span id="qNumLbl">1</span>/20</div>
+  <div class="pdots" id="pdots"></div>
+</div>
+
+<div class="main" id="mainArea">
+
+  <!-- SCORE SCREEN -->
+  <div class="score-scr" id="scoreScr">
+    <div class="sbig" id="sPct">—</div>
+    <div class="ssub">GRE Quantitative · FREESTUDY Score Estimate</div>
+    <div class="sbar-o"><div class="sbar-i" id="sBar" style="width:0%"></div></div>
+    <div class="sstats">
+      <div><div class="sval g" id="sC">—</div><div class="slbl">Correct</div></div>
+      <div><div class="sval r" id="sW">—</div><div class="slbl">Incorrect</div></div>
+      <div><div class="sval" id="sS">—</div><div class="slbl">Skipped</div></div>
+      <div><div class="sval" id="sT">—</div><div class="slbl">Time Used</div></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-s" onclick="startReview()">📋 Review All Answers</button>
+      <button class="btn btn-p" onclick="location.reload()">↺ Retake</button>
+    </div>
+  </div>
+
+  <!-- QUESTION VIEW -->
+  <div id="qView">
+    <div class="qhdr">
+      <span class="qbadge" id="qBadge">Question 1 of 20</span>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="qtag" id="qTag"></span>
+        <button class="flagbtn" id="flagBtn" onclick="toggleFlag()">⚑ Mark for Review</button>
+      </div>
+    </div>
+    <div class="dir" id="dirBox"></div>
+    <div class="qpanel" id="qPanel"></div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="botnav" id="botNav">
+  <button class="btn btn-s" id="btnBack" onclick="go(-1)" disabled>← Back</button>
+  <div class="navctr" id="navCtr"></div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-s" id="btnSkip" onclick="skip()">Skip</button>
+    <button class="btn btn-p" id="btnNext" onclick="go(1)">Next →</button>
+    <button class="btn btn-d" id="btnSubmit" style="display:none" onclick="submitExam()">Submit</button>
+  </div>
+</div>
+
+<footer class="pgfoot">
+  <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:0;">
+
+    <!-- Logo mark -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 68" width="44" height="50" style="margin-bottom:10px;">
+      <circle cx="30" cy="9" r="8.5" fill="#2DD4BF"/>
+      <path d="M19,22 Q30,17 41,22 L38,36 L22,36 Z" fill="#2DD4BF"/>
+      <path d="M10,33 Q20,27 30,33 L30,50 Q20,47 10,50 Z" fill="#2DD4BF"/>
+      <path d="M30,33 Q40,27 50,33 L50,50 Q40,47 30,50 Z" fill="#2DD4BF"/>
+    </svg>
+
+    <!-- Brand name + tagline -->
+    <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;letter-spacing:3px;color:#FFFFFF;text-align:center;text-transform:uppercase;">FreeStudy Hub</div>
+    <div style="font-family:'DM Sans',sans-serif;font-weight:400;font-size:10px;letter-spacing:2.5px;color:#2DD4BF;text-transform:uppercase;margin:4px 0 6px;">Learn Free. Go Further.</div>
+
+    <!-- Value line -->
+    <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:#7A96BC;text-align:center;margin-bottom:18px;line-height:1.6;">
+      GRE &nbsp;·&nbsp; GMAT &nbsp;·&nbsp; Test Prep &nbsp;·&nbsp; Academic Coaching<br>
+      <span style="color:#94BAE8;">Free for everyone &nbsp;·&nbsp; Premium for those who want more</span>
+    </div>
+
+    <!-- Divider -->
+    <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,#1A3558,transparent);margin-bottom:16px;"></div>
+
+    <!-- Contact row -->
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-bottom:14px;">
+      <a href="tel:+2348032710570" style="display:flex;align-items:center;gap:7px;color:#CBD8EC;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;">
+        <span style="background:#1A3558;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;">📞</span>
+        +234 803 271 0570
+      </a>
+      <a href="https://freestudyhub.store" target="_blank" style="display:flex;align-items:center;gap:7px;color:#2DD4BF;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;">
+        <span style="background:#1A3558;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;">🌐</span>
+        freestudyhub.store
+      </a>
+      <a href="https://youtube.com/@LeonardNwosu-k8z" target="_blank" style="display:flex;align-items:center;gap:7px;color:#FC4444;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;">
+        <span style="background:#1A3558;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;">▶</span>
+        youtube.com/@LeonardNwosu-k8z
+      </a>
+    </div>
+
+    <!-- Join Now CTA -->
+    <a href="https://freestudyhub.store" target="_blank"
+       style="display:inline-block;background:linear-gradient(135deg,#0D9488,#1D4ED8);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;padding:10px 32px;border-radius:24px;text-decoration:none;text-transform:uppercase;margin-bottom:18px;box-shadow:0 4px 16px rgba(13,148,136,0.35);">
+      Join Now — It's Free
+    </a>
+
+    <!-- Divider -->
+    <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,#1A3558,transparent);margin-bottom:14px;"></div>
+
+    <!-- Credit + copyright -->
+    <div style="font-family:'DM Sans',sans-serif;font-size:10.5px;color:#4A6080;text-align:center;line-height:1.8;">
+      Prepared by <span style="color:#7A96BC;font-weight:600;">Leonard Nwosu</span> &nbsp;·&nbsp; Free Study Hub<br>
+      &copy; 2026 Free Study Hub. All Rights Reserved.
+    </div>
+
+  </div>
+</footer>
+
+<script>
+// -- DATA --
+const TOTAL = 20;
+const TEST_ID = 't1';
+const Qs = [
+  {
+    num: 1,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="stimulus"><em>x</em>, <em>y</em>, and <em>z</em> are consecutive integers such that <em>x</em> &lt; <em>y</em> &lt; <em>z</em>.</div>
+        <div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val"><span style="display:inline-block;text-align:center;"><em>y</em></span></div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">
+              <span class="frac-inline" style="font-size:20px;">
+                <span><em>x</em> + <em>z</em></span>
+                <span class="fbar"></span>
+                <span>2</span>
+              </span>
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="1" data-correct="C" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q1" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q1" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q1" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q1" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp1"><strong>Answer: (C)  The two quantities are equal.</strong><br>Since <em>x</em>, <em>y</em>, <em>z</em> are consecutive integers, <em>z = x + 2</em> and <em>y = x + 1</em>. Quantity B = (<em>x</em> + <em>x</em> + 2)/2 = <em>x</em> + 1 = <em>y</em>. The two quantities are always equal.</div>`
+  },
+  {
+    num: 2,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val"><span style="display:inline-block;text-align:center;">(3)<sup>4</sup></span></div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">(3)<sup>3</sup>
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="2" data-correct="A" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q2" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q2" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q2" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q2" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp2"><strong>Answer: (A)  Quantity A is greater.</strong><br>(3)<sup>4</sup> = 81 (positive). (3)<sup>3</sup> = 1/(3)<sup>3</sup> = 1/27 (negative). Since 81 > 1/27, Quantity A is greater.</div>`
+  },
+  {
+    num: 3,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="diagram-wrap">
+          <svg width="180" height="130" viewBox="0 0 180 130">
+            <polygon points="30,110 30,20 140,110" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linejoin="round"/>
+            <rect x="30" y="100" width="10" height="10" fill="none" stroke="#1E293B" stroke-width="1.5"/>
+            <text x="14" y="68" font-family="'Source Serif 4', serif" font-size="15" fill="#1E293B">3</text>
+            <text x="80" y="125" font-family="'Source Serif 4', serif" font-size="15" fill="#1E293B">4</text>
+            <text x="92" y="60" font-family="'Source Serif 4', serif" font-size="15" font-style="italic" fill="#1D4ED8">x</text>
+          </svg>
+        </div>
+        <div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val"><span style="display:inline-block;text-align:center;"><em>x</em></span></div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">5
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="3" data-correct="D" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q3" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q3" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q3" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q3" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp3"><strong>Answer: (D)  Cannot be determined.</strong><br>The figure is not drawn to scale and does not indicate a right angle. If the angle between sides 3 and 4 is a right angle, <em>x</em> = 5 (equal). Otherwise <em>x</em> could differ. Cannot be determined.</div>`
+  },
+  {
+    num: 4,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val"><span style="display:inline-block;text-align:center;"><em>y</em><sup>7</sup>  <em>y</em><sup>8</sup>  <em>y</em><sup>6</sup></span></div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">3<em>y</em><sup>9</sup>
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="4" data-correct="D" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q4" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q4" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q4" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q4" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp4"><strong>Answer: (D)  Cannot be determined.</strong><br><em>y</em><sup>7</sup>  <em>y</em><sup>8</sup>  <em>y</em><sup>6</sup> = <em>y</em><sup>9</sup>. Compare <em>y</em><sup>9</sup> vs 3<em>y</em><sup>9</sup>: if <em>y</em> > 0, B is greater; if <em>y</em> = 0, equal; if <em>y</em> < 0, A is greater. Cannot be determined.</div>`
+  },
+  {
+    num: 5,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="stimulus"><em>xy</em> &gt; 0 and <em>yz</em> &lt; 0</div>
+        <div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val"><span style="display:inline-block;text-align:center;"><em>xz</em></span></div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">0
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="5" data-correct="B" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q5" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q5" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q5" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q5" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp5"><strong>Answer: (B)  Quantity B is greater.</strong><br><em>xy</em> > 0 means <em>x</em> and <em>y</em> have the same sign. <em>yz</em> < 0 means <em>y</em> and <em>z</em> have opposite signs. So <em>x</em> and <em>z</em> have opposite signs, making <em>xz</em> < 0 < Quantity B.</div>`
+  },
+  {
+    num: 6,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="stimulus">In 2011, it cost Tammy $1.30 to manufacture each copy of her magazine, which she sold for $2.30. In 2012, it cost Tammy $1.50 to manufacture each copy of the same magazine, which she sold for $3.00.</div>
+        <div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val" style="font-size:13px; padding: 14px 10px; line-height:1.5;">The percent by which Tammy's profit per copy changed from 2011 to 2012</div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val">33%
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="6" data-correct="A" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q6" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q6" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q6" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q6" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp6"><strong>Answer: (A)  Quantity A is greater.</strong><br>2011 profit: $2.30  $1.30 = $1.00. 2012 profit: $3.00  $1.50 = $1.50. Percent change = $0.50/$1.00  100 = <strong>50%</strong> > 33%.</div>`
+  },
+  {
+    num: 7,
+    type: `Quantitative Comparison`,
+    directions: `Compare Quantity A and Quantity B using any additional information given. Select: <strong>(A)</strong> Quantity A is greater &nbsp; <strong>(B)</strong> Quantity B is greater &nbsp; <strong>(C)</strong> The two quantities are equal &nbsp; <strong>(D)</strong> The relationship cannot be determined.`,
+    body: `<div class="stimulus">List X: 4, 7, 9, 11, 24, 32. List Y (not shown) is formed by dividing each term of List X by 2 and then adding 5.</div>
+        <div class="qc-wrap">
+          <div class="qc-col">
+            <div class="qc-head">Quantity A</div>
+            <div class="qc-val" style="font-size:14px;">The range of List Y</div>
+          </div>
+          <div class="qc-col">
+            <div class="qc-head">Quantity B</div>
+            <div class="qc-val" style="font-size:14px;">6 less than the greatest number in List Y
+        </div>
+        </div>
+        </div>
+        <ul class="options" data-q="7" data-correct="B" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q7" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span>&nbsp; Quantity A is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q7" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span>&nbsp; Quantity B is greater.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q7" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span>&nbsp; The two quantities are equal.</label></li>
+          <li><label class="opt-label"><input type="radio" name="q7" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span>&nbsp; The relationship cannot be determined from the information given.</label></li>
+        </ul>
+<div class="explanation" id="exp7"><strong>Answer: (B)  Quantity B is greater.</strong><br>List Y = {7, 8.5, 9.5, 10.5, 17, 21}. Range = 21  7 = 14. Greatest  6 = 21  6 = 15. Since 15 > 14, Quantity B is greater.</div>`
+  },
+  {
+    num: 8,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="stimulus plain" style="font-family: var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">Which of the following represents the length of the diagonal <em>d</em> of a square with area <em>a</em>?</div>
+        <ul class="options" data-q="8" data-correct="B" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q8" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> <span style="font-family:var(--serif);font-style:italic;">d = a<sup>2</sup></span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q8" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> <span style="font-family:var(--serif);font-style:italic;">d = (2a)</span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q8" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> <span style="font-family:var(--serif);font-style:italic;">d = 2a</span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q8" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> <span style="font-family:var(--serif);font-style:italic;">d = a2</span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q8" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> <span style="font-family:var(--serif);font-style:italic;">d = a3</span></label></li>
+        </ul>
+        <div class="explanation" id="exp8">
+          <strong>Answer: (B) d = (2a).</strong><br>
+          Area of square = <em>s</em><sup>2</sup> = <em>a</em>, so <em>s</em> = <em>a</em>. The diagonal of a square with side <em>s</em> is <em>d</em> = <em>s</em>2 = <em>a</em>  2 = (2<em>a</em>).`
+  },
+  {
+    num: 9,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">In an apartment complex, 60% of the apartments contain at least one television, and 20% of these apartments are equipped with cable. If every apartment that is equipped with cable contains at least one television, what percent of the apartments in the complex are <strong>not</strong> equipped with cable?</div>
+        <ul class="options" data-q="9" data-correct="D" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q9" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 8%</label></li>
+          <li><label class="opt-label"><input type="radio" name="q9" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 12%</label></li>
+          <li><label class="opt-label"><input type="radio" name="q9" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 16%</label></li>
+          <li><label class="opt-label"><input type="radio" name="q9" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 88%</label></li>
+          <li><label class="opt-label"><input type="radio" name="q9" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 92%</label></li>
+        </ul>
+        <div class="explanation" id="exp9">
+          <strong>Answer: (D) 88%.</strong><br>
+          Cable apartments = 20% of 60% = 12% of all apartments. Therefore, apartments <em>not</em> equipped with cable = 100%  12% = <strong>88%</strong>.`
+  },
+  {
+    num: 10,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="note-box">Questions 1012 are based on the chart below.</div>
+<div class="chart-outer">
+          <div class="chart-title">Heights of 43 Presidents of the United States of America (in cm)</div>
+          <div class="chart-body">
+            <div class="stem-chart">
+              <div class="chart-baseline"></div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">163</span>
+                </div>
+                <div class="stem-label">160164<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=1)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">168</span>
+                  <span class="stem-val">168</span>
+                </div>
+                <div class="stem-label">165169<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=2)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">174</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">171</span>
+                  <span class="stem-val">170</span>
+                  <span class="stem-val">170</span>
+                </div>
+                <div class="stem-label">170174<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=8)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">179</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">177</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                </div>
+                <div class="stem-label">175179<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#2A5F8F;">
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                </div>
+                <div class="stem-label">180184<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=15)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">189</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">187</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                </div>
+                <div class="stem-label">185189<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">190</span>
+                </div>
+                <div class="stem-label">190194<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=3)</span></div>
+              </div>
+            </div>
+<div style="font-weight:600; font-size:13.5px; color:var(--navy); margin-bottom:10px;">Question 10 &nbsp;&nbsp; <span style="font-weight:400; color:var(--text-muted);">Multiple Choice</span></div>
+          <p style="font-family:var(--serif); font-size:15px; margin-bottom:14px; line-height:1.7;">What is the range of heights of the 43 U.S. presidents in the chart?</p>
+          <ul class="options" data-q="10" data-correct="A" data-type="radio">
+            <li><label class="opt-label"><input type="radio" name="q10" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 30 cm</label></li>
+            <li><label class="opt-label"><input type="radio" name="q10" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 34 cm</label></li>
+            <li><label class="opt-label"><input type="radio" name="q10" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 35 cm</label></li>
+            <li><label class="opt-label"><input type="radio" name="q10" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 163 cm</label></li>
+            <li><label class="opt-label"><input type="radio" name="q10" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 178 cm</label></li>
+          </ul>
+          <div class="explanation" id="exp10">
+            <strong>Answer: (A) 30 cm.</strong><br>
+            The range is the difference between the highest and lowest values. From the chart, the tallest president is 193 cm and the shortest is 163 cm. Range = 193  163 = <strong>30 cm</strong>.
+          </div>
+        </div>
+
+        <!-- Q11 -->`
+  },
+  {
+    num: 11,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="note-box">Questions 1012 are based on the chart below.</div>
+<div class="chart-outer">
+          <div class="chart-title">Heights of 43 Presidents of the United States of America (in cm)</div>
+          <div class="chart-body">
+            <div class="stem-chart">
+              <div class="chart-baseline"></div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">163</span>
+                </div>
+                <div class="stem-label">160164<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=1)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">168</span>
+                  <span class="stem-val">168</span>
+                </div>
+                <div class="stem-label">165169<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=2)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">174</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">171</span>
+                  <span class="stem-val">170</span>
+                  <span class="stem-val">170</span>
+                </div>
+                <div class="stem-label">170174<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=8)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">179</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">177</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                </div>
+                <div class="stem-label">175179<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#2A5F8F;">
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                </div>
+                <div class="stem-label">180184<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=15)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">189</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">187</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                </div>
+                <div class="stem-label">185189<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">190</span>
+                </div>
+                <div class="stem-label">190194<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=3)</span></div>
+              </div>
+            </div>
+<div style="font-weight:600; font-size:13.5px; color:var(--navy); margin-bottom:10px;">Question 11 &nbsp;&nbsp; <span style="font-weight:400; color:var(--text-muted);">Multiple Choice</span></div>
+          <p style="font-family:var(--serif); font-size:15px; margin-bottom:14px; line-height:1.7;">What is the median height of the 43 U.S. presidents in the chart, in centimeters?</p>
+          <ul class="options" data-q="11" data-correct="E" data-type="radio">
+            <li><label class="opt-label"><input type="radio" name="q11" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 175</label></li>
+            <li><label class="opt-label"><input type="radio" name="q11" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 177</label></li>
+            <li><label class="opt-label"><input type="radio" name="q11" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 178</label></li>
+            <li><label class="opt-label"><input type="radio" name="q11" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 180</label></li>
+            <li><label class="opt-label"><input type="radio" name="q11" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 182</label></li>
+          </ul>
+          <div class="explanation" id="exp11">
+            <strong>Answer: (E) 182 cm.</strong><br>
+            With 43 data points, the median is the 22nd value in ascending order. Counting up: 1 (160164) + 2 (165169) + 8 (170174) + 9 (175179) = 20 values. The 21st35th values are in the 180184 range. The 22nd value (2nd in this group) = <strong>182 cm</strong>.
+          </div>
+        </div>
+
+        <!-- Q12 -->`
+  },
+  {
+    num: 12,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="note-box">Questions 1012 are based on the chart below.</div>
+<div class="chart-outer">
+          <div class="chart-title">Heights of 43 Presidents of the United States of America (in cm)</div>
+          <div class="chart-body">
+            <div class="stem-chart">
+              <div class="chart-baseline"></div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">163</span>
+                </div>
+                <div class="stem-label">160164<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=1)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">168</span>
+                  <span class="stem-val">168</span>
+                </div>
+                <div class="stem-label">165169<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=2)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">174</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">173</span>
+                  <span class="stem-val">171</span>
+                  <span class="stem-val">170</span>
+                  <span class="stem-val">170</span>
+                </div>
+                <div class="stem-label">170174<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=8)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values">
+                  <span class="stem-val">179</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">178</span>
+                  <span class="stem-val">177</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                  <span class="stem-val">175</span>
+                </div>
+                <div class="stem-label">175179<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#2A5F8F;">
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">183</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">182</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                  <span class="stem-val">180</span>
+                </div>
+                <div class="stem-label">180184<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=15)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">189</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">188</span>
+                  <span class="stem-val">187</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                  <span class="stem-val">185</span>
+                </div>
+                <div class="stem-label">185189<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=9)</span></div>
+              </div>
+              <div class="stem-col">
+                <div class="stem-values" style="background:#5B8DB8;">
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">193</span>
+                  <span class="stem-val">190</span>
+                </div>
+                <div class="stem-label">190194<br><span style="color:#3D6A9E;font-size:9px;font-weight:700;">(n=3)</span></div>
+              </div>
+            </div>
+<div style="font-weight:600; font-size:13.5px; color:var(--navy); margin-bottom:10px;">Question 12 &nbsp;&nbsp; <span style="font-weight:400; color:var(--text-muted);">Multiple Choice</span></div>
+          <p style="font-family:var(--serif); font-size:15px; margin-bottom:14px; line-height:1.7;">Approximately what percent of U.S. presidents are 185 centimeters or taller?</p>
+          <ul class="options" data-q="12" data-correct="B" data-type="radio">
+            <li><label class="opt-label"><input type="radio" name="q12" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 10%</label></li>
+            <li><label class="opt-label"><input type="radio" name="q12" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 23%</label></li>
+            <li><label class="opt-label"><input type="radio" name="q12" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 29%</label></li>
+            <li><label class="opt-label"><input type="radio" name="q12" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 43%</label></li>
+            <li><label class="opt-label"><input type="radio" name="q12" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 50%</label></li>
+          </ul>
+          <div class="explanation" id="exp12">
+            <strong>Answer: (B) 23%.</strong><br>
+            From the chart, 10 U.S. presidents are 185 cm or taller. As a percent: (10 / 43)  100  <strong>23%</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUESTION 13 -->`
+  },
+  {
+    num: 13,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">
+          If <em>m</em> + 5 &lt;
+          <span class="frac-inline"><span>3</span><span class="fbar"></span><span>2</span></span>,
+          which of the following could be the value of <em>m</em>?
+        </div>
+        <ul class="options" data-q="13" data-correct="A" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q13" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> <span class="frac-inline"><span>15</span><span class="fbar"></span><span>4</span></span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q13" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> <span class="frac-inline"><span>7</span><span class="fbar"></span><span>2</span></span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q13" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 2</label></li>
+          <li><label class="opt-label"><input type="radio" name="q13" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> <span class="frac-inline"><span>7</span><span class="fbar"></span><span>2</span></span></label></li>
+          <li><label class="opt-label"><input type="radio" name="q13" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 2</label></li>
+        </ul>
+        <div class="explanation" id="exp13">
+          <strong>Answer: (A) 15/4.</strong><br>
+          Solve: <em>m</em> + 5 &lt; 3/2  <em>m</em> &lt; 3/2  5 = 3/2  10/2 = 7/2 = 3.5. Only choice (A): 15/4 = 3.75, which is less than 3.5.  Choice (B): 7/2 = 3.5, not less than 3.5 (equal).  Others are greater than 3.5.`
+  },
+  {
+    num: 14,
+    type: `Select All That Apply`,
+    directions: `Select <strong>all</strong> answer choices that apply.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:6px; line-height:1.7;">List M consists of the numbers 10, 20, 30, 40, 50. Which of the following lists have an average (arithmetic mean) equal to the average of List M?</div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px; font-style:italic;">Indicate <u>all</u> such lists.</div>
+        <ul class="options" data-q="14" data-correct="ACD" data-type="checkbox">
+          <li><label class="opt-label"><input type="checkbox" name="q14" value="A"><span class="opt-square"></span><span class="opt-key">A.</span> 0, 30, 60</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q14" value="B"><span class="opt-square"></span><span class="opt-key">B.</span> 10, 20, 30, 35, 50</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q14" value="C"><span class="opt-square"></span><span class="opt-key">C.</span> 10, 22, 30, 38, 50</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q14" value="D"><span class="opt-square"></span><span class="opt-key">D.</span> 0, 0, 0, 0, 150</label></li>
+        </ul>
+        <div class="explanation" id="exp14">
+          <strong>Answer: A, C, and D.</strong><br>
+          Mean of M = (10+20+30+40+50)/5 = 150/5 = 30. A: (0+30+60)/3 = 90/3 = 30 . B: (10+20+30+35+50)/5 = 145/5 = 29 . C: (10+22+30+38+50)/5 = 150/5 = 30 . D: 150/5 = 30 .`
+  },
+  {
+    num: 15,
+    type: `Numeric Entry`,
+    directions: `Enter your answer in the box.`,
+    body: `<div class="diagram-wrap">
+          <svg width="280" height="350" viewBox="0 0 400 500">
+            <!-- Hexagon -->
+            <polygon points="120,80 280,80 340,180 280,320 120,320 60,180"
+              fill="none" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Triangle -->
+            <polygon points="120,320 280,320 200,450"
+              fill="none" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+            <!-- Shared base line -->
+            <line x1="120" y1="320" x2="280" y2="320" stroke="#1E293B" stroke-width="3"/>
+            <!-- x labels -->
+            <text x="145" y="110" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <text x="235" y="110" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <text x="70"  y="190" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <text x="295" y="190" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <text x="145" y="308" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <text x="235" y="308" font-family="Georgia,serif" font-size="26" font-style="italic">x</text>
+            <!-- y labels -->
+            <text x="145" y="355" font-family="Georgia,serif" font-size="26" font-style="italic">y</text>
+            <text x="235" y="355" font-family="Georgia,serif" font-size="26" font-style="italic">y</text>
+            <text x="185" y="425" font-family="Georgia,serif" font-size="26" font-style="italic">y</text>
+          </svg>
+        </div>
+        </div>
+        <p style="font-family:var(--serif); font-size:15px; margin-bottom:16px; line-height:1.7;">What is the value of <em>xy</em>?</p>
+        <div class="numeric-wrap">
+          <span class="numeric-label">Enter your answer:</span>
+          <input type="text" class="num-input" id="q15input" placeholder="Answer" data-q="15" data-correct="7200">
+        </div>
+        <div class="explanation" id="exp15">
+          <strong>Answer: 7200.</strong><br>
+          The top figure is a <strong>hexagon</strong> with all 6 interior angles labeled <em>x</em>. The sum of interior angles of a hexagon = (6  2)  180 = 720. So 6<em>x</em> = 720  <em>x</em> = <strong>120</strong>.<br>
+          The bottom figure is a <strong>triangle</strong> with all 3 angles labeled <em>y</em>. Sum of triangle angles = 180. So 3<em>y</em> = 180  <em>y</em> = <strong>60</strong>.<br>
+          Therefore <em>xy</em> = 120  60 = <strong>7200</strong>.`
+  },
+  {
+    num: 16,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<table class="data-table" style="max-width:480px; margin-bottom:18px;">
+          <caption style="font-weight:700; font-size:13px; text-align:center; padding:8px 0; color:var(--navy);">Buying Habits of Customers Buying Toothpaste X at Chan's Grocery Store</caption>
+          <thead>
+            <tr>
+              <th>Discount Type</th>
+              <th>Manufacturers' Coupon</th>
+              <th>Store Coupon</th>
+              <th>No Coupon</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:600;">Percent of Customers</td>
+              <td>54%</td>
+              <td>43%</td>
+              <td><em>x</em>%</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">The table above summarizes all possible discount types for customers buying toothpaste X at a certain grocery store. No one used both types of coupon. If a person is selected randomly from among these customers, what is the probability that this customer did <strong>not</strong> use a coupon?</div>
+        <ul class="options" data-q="16" data-correct="B" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q16" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 0.003</label></li>
+          <li><label class="opt-label"><input type="radio" name="q16" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 0.03</label></li>
+          <li><label class="opt-label"><input type="radio" name="q16" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 0.3</label></li>
+          <li><label class="opt-label"><input type="radio" name="q16" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 0.33</label></li>
+          <li><label class="opt-label"><input type="radio" name="q16" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 3.3</label></li>
+        </ul>
+        <div class="explanation" id="exp16">
+          <strong>Answer: (B) 0.03.</strong><br>
+          Since the three groups are mutually exclusive and exhaustive: 54 + 43 + <em>x</em> = 100, so <em>x</em> = 3%. Probability of no coupon = 3/100 = <strong>0.03</strong>.`
+  },
+  {
+    num: 17,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">Company A can pave 500 feet of sidewalk in 6 hours, and Company B can pave 1,000 feet of sidewalk in 8 hours. At these rates, how many more <strong><u>yards</u></strong> of sidewalk can Company B pave in 9 hours than Company A can pave in 9 hours? (3 feet = 1 yard)</div>
+        <ul class="options" data-q="17" data-correct="A" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q17" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 125</label></li>
+          <li><label class="opt-label"><input type="radio" name="q17" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 166</label></li>
+          <li><label class="opt-label"><input type="radio" name="q17" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 333</label></li>
+          <li><label class="opt-label"><input type="radio" name="q17" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 375</label></li>
+          <li><label class="opt-label"><input type="radio" name="q17" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 500</label></li>
+        </ul>
+        <div class="explanation" id="exp17">
+          <strong>Answer: (A) 125 yards.</strong><br>
+          Company A rate = 500/6 ft/hr. In 9 hours: 9  500/6 = 750 ft = 250 yards. Company B rate = 1000/8 = 125 ft/hr. In 9 hours: 9  125 = 1125 ft = 375 yards. Difference = 375  250 = <strong>125 yards</strong>.`
+  },
+  {
+    num: 18,
+    type: `Numeric Entry (Fraction)`,
+    directions: `Enter your answer as a fraction. Reduction is not required.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:6px; line-height:1.7;">If the three sides of an equilateral triangle are equal to 4<em>x</em>, 6<em>y</em>, and 24, respectively, what is the ratio of <em>x</em> to <em>y</em>?</div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px; font-style:italic;">Give your answer as a fraction. Reduction is not required.</div>
+        <div class="fraction-wrap">
+          <input type="text" class="frac-input" id="q18num" placeholder="Numerator" data-q="18" data-correct="6/4">
+          <div class="frac-line"></div>
+          <input type="text" class="frac-input" id="q18den" placeholder="Denominator">
+        </div>
+        <div class="explanation" id="exp18">
+          <strong>Answer: 6/4 (or 3/2).</strong><br>
+          All sides equal: 4<em>x</em> = 6<em>y</em> = 24. From 4<em>x</em> = 24: <em>x</em> = 6. From 6<em>y</em> = 24: <em>y</em> = 4. Ratio <em>x</em>/<em>y</em> = 6/4 = <strong>3/2</strong>.`
+  },
+  {
+    num: 19,
+    type: `Select All That Apply`,
+    directions: `Select <strong>all</strong> answer choices that apply.`,
+    body: `<div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:6px; line-height:1.7;">If the ratio of undergraduate students to graduate students is 7 to 4 and the ratio of graduate students to professors is 2 to 1, which could be the total number of undergraduate students, graduate students, and professors?</div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px; font-style:italic;">Indicate <u>all</u> such numbers.</div>
+        <ul class="options" data-q="19" data-correct="AC" data-type="checkbox">
+          <li><label class="opt-label"><input type="checkbox" name="q19" value="A"><span class="opt-square"></span><span class="opt-key">A.</span> 520</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q19" value="B"><span class="opt-square"></span><span class="opt-key">B.</span> 640</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q19" value="C"><span class="opt-square"></span><span class="opt-key">C.</span> 2,600</label></li>
+          <li><label class="opt-label"><input type="checkbox" name="q19" value="D"><span class="opt-square"></span><span class="opt-key">D.</span> 10,000</label></li>
+        </ul>
+        <div class="explanation" id="exp19">
+          <strong>Answer: A (520) and C (2,600).</strong><br>
+          U:G = 7:4 and G:P = 2:1. To combine: G must be consistent. LCM(4,2) = 4. So U:G:P = 7:4:2. Total ratio = 13 parts. Valid totals must be divisible by 13. 520  13 = 40 . 640  13  49.2 . 2600  13 = 200 . 10000  13  769.2 .`
+  },
+  {
+    num: 20,
+    type: `Multiple Choice`,
+    directions: `Select <strong>one</strong> answer choice.`,
+    body: `<div class="diagram-wrap">
+          <!--
+            Matching uploaded image exactly:
+            - Circle center O slightly right of center
+            - OC goes horizontally RIGHT, labeled "18"
+            - OA goes to lower-left (about 210 from +x axis)
+            - x label is just below-right of O between the two radii
+            - A is on the left side of the circle (mid-height, slightly below center)
+            - B is a dot at the very bottom of the circle
+            - C is on the right side of the circle (same height as O)
+            - The arc from C going clockwise down past B and up to A is the major arc (160)
+          -->
+          <svg width="260" height="260" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+            <!-- Circle: center (130,120), radius 100 -->
+            <circle cx="130" cy="120" r="100" fill="white" stroke="#1E293B" stroke-width="2.2"/>
+
+            <!-- Radius OC: horizontal right  C=(230,120) -->
+            <line x1="130" y1="120" x2="230" y2="120" stroke="#1E293B" stroke-width="2.5"/>
+
+            <!-- Radius OA: lower-left at ~210  A=(130+100cos210, 120+100sin210) = (130-86.6, 120+50) = (43.4, 170) -->
+            <line x1="130" y1="120" x2="43" y2="170" stroke="#1E293B" stroke-width="2.5"/>
+
+            <!-- Center dot -->
+            <circle cx="130" cy="120" r="3.5" fill="#1E293B"/>
+
+            <!-- B dot at bottom of circle (270) = (130, 220) -->
+            <circle cx="130" cy="220" r="3.5" fill="#1E293B"/>
+
+            <!-- Labels -->
+            <!-- O: just left of center dot -->
+            <text x="112" y="116" font-family="Georgia,serif" font-size="15" font-style="italic" fill="#1E293B">O</text>
+            <!-- 18: midpoint of OC, above the line -->
+            <text x="170" y="113" font-family="Georgia,serif" font-size="14" fill="#1E293B">18</text>
+            <!-- x: just below-right of O, between radii -->
+            <text x="136" y="140" font-family="Georgia,serif" font-size="14" font-style="italic" fill="#1E293B">x</text>
+            <!-- C: right of circle -->
+            <text x="237" y="125" font-family="Georgia,serif" font-size="15" font-style="italic" fill="#1E293B">C</text>
+            <!-- A: left of circle -->
+            <text x="22" y="175" font-family="Georgia,serif" font-size="15" font-style="italic" fill="#1E293B">A</text>
+            <!-- B: below bottom dot -->
+            <text x="124" y="243" font-family="Georgia,serif" font-size="15" font-style="italic" fill="#1E293B">B</text>
+          </svg>
+        </div>
+        <div class="stimulus plain" style="font-family:var(--serif); font-size:15px; margin-bottom:18px; line-height:1.7;">If <em>O</em> is the center of the circle and <em>x</em> = 160, what is the perimeter of sector <em>ABCO</em>?</div>
+        <ul class="options" data-q="20" data-correct="D" data-type="radio">
+          <li><label class="opt-label"><input type="radio" name="q20" value="A"><span class="opt-circle">A</span><span class="opt-key">(A)</span> 18 + 8</label></li>
+          <li><label class="opt-label"><input type="radio" name="q20" value="B"><span class="opt-circle">B</span><span class="opt-key">(B)</span> 18 + 16</label></li>
+          <li><label class="opt-label"><input type="radio" name="q20" value="C"><span class="opt-circle">C</span><span class="opt-key">(C)</span> 36 + 8</label></li>
+          <li><label class="opt-label"><input type="radio" name="q20" value="D"><span class="opt-circle">D</span><span class="opt-key">(D)</span> 36 + 16</label></li>
+          <li><label class="opt-label"><input type="radio" name="q20" value="E"><span class="opt-circle">E</span><span class="opt-key">(E)</span> 36 + 24</label></li>
+        </ul>
+        <div class="explanation" id="exp20">
+          <strong>Answer: (D) 36 + 16.</strong><br>
+          The radius = 18. The sector angle = <em>x</em> = 160. The minor angle (between the two radii) = 360  160 = 200? No  the labeled <em>x</em> is the central angle of the sector = 160. Arc length = (160/360)  2(18) = (4/9)  36 = 16. Perimeter = OA + OC + arc = 18 + 18 + 16 = <strong>36 + 16</strong>.`
+  }
+];
+
+const correctMap = {
+  1:'C',2:'A',3:'D',4:'D',5:'B',6:'A',7:'B',8:'B',9:'D',
+  10:'A',11:'E',12:'B',13:'A',14:'ACD',15:'7200',16:'B',17:'A',18:'6/4',19:'AC',20:'D'
+};
+
+// -- STATE -------------------------------------------------
+let cur = 0; // 0-indexed
+let answers = {}; // qnum  value string
+let flags = {};   // qnum  bool
+let submitted = false;
+let elapsed = 0;
+let timerInterval = null;
+
+// -- TIMER -------------------------------------------------
+function startTimer() {
+  let rem = 35*60;
+  timerInterval = setInterval(() => {
+    elapsed++; rem--;
+    if (rem <= 0) { clearInterval(timerInterval); submitExam(); return; }
+    const m = String(Math.floor(rem/60)).padStart(2,'0');
+    const s = String(rem%60).padStart(2,'0');
+    document.getElementById('timerTxt').textContent = m+':'+s;
+    const tb = document.getElementById('timerBox');
+    if (rem < 300) tb.classList.add('warn'); else tb.classList.remove('warn');
+  }, 1000);
+}
+
+// -- PROGRESS DOTS -----------------------------------------
+function buildDots() {
+  const c = document.getElementById('pdots');
+  c.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.textContent = i+1;
+    d.onclick = (()=>{const idx=i; return ()=>jumpTo(idx);})();
+    d.id = 'dot'+i;
+    c.appendChild(d);
+  }
+}
+
+function updateDots() {
+  for (let i = 0; i < 20; i++) {
+    const d = document.getElementById('dot'+i);
+    if (!d) continue;
+    const qnum = Qs[i].num;
+    d.className = 'dot';
+    if (submitted) {
+      if (answers[qnum] === undefined) d.className = 'dot';
+      else if (isCorrect(qnum)) d.classList.add('ok');
+      else d.classList.add('bad');
+    } else {
+      if (i === cur) d.classList.add('cur');
+      else if (flags[qnum]) d.classList.add('flag');
+      else if (answers[qnum] !== undefined) d.classList.add('ans');
+    }
+  }
+  document.getElementById('qNumLbl').textContent = cur+1;
+}
+
+// -- RENDER QUESTION ---------------------------------------
+function renderQ(idx) {
+  const q = Qs[idx];
+  document.getElementById('qBadge').textContent = `Question ${cur+1} of 20`;
+  document.getElementById('qTag').textContent = q.type;
+  document.getElementById('dirBox').innerHTML = q.directions;
+
+  // Flag button
+  const fb = document.getElementById('flagBtn');
+  if (flags[q.num]) { fb.classList.add('on'); fb.textContent = ' Marked for Review'; }
+  else { fb.classList.remove('on'); fb.textContent = ' Mark for Review'; }
+
+  document.getElementById('qPanel').innerHTML = q.body;
+
+  // Restore saved answer
+  restoreAnswer(q);
+
+  // After inserting HTML, wire up interactions
+  wireOptions(q);
+
+  // Nav buttons
+  document.getElementById('btnBack').disabled = (cur === 0);
+  const isLast = (cur === 19);
+  document.getElementById('btnNext').style.display = isLast ? 'none' : '';
+  document.getElementById('btnSkip').style.display = isLast ? 'none' : '';
+  document.getElementById('btnSubmit').style.display = isLast ? '' : 'none';
+
+  // Status
+  const answered = Object.keys(answers).length;
+  document.getElementById('navCtr').textContent = `${answered}/20 answered`;
+
+  updateDots();
+  window.scrollTo(0,0);
+}
+
+function wireOptions(q) {
+  // Wire radio options
+  document.querySelectorAll('.options[data-type="radio"]').forEach(ul => {
+    const qn = parseInt(ul.dataset.q);
+    ul.querySelectorAll('label.opt-label').forEach(lbl => {
+      lbl.addEventListener('click', (e) => {
+        if (submitted) return;
+        const inp = lbl.querySelector('input');
+        if (!inp) return;
+        ul.querySelectorAll('label.opt-label').forEach(l => l.classList.remove('sel'));
+        lbl.classList.add('sel');
+        inp.checked = true;
+        answers[qn] = inp.value;
+        updateDots();
+        document.getElementById('navCtr').textContent = `${Object.keys(answers).length}/20 answered`;
+      });
+    });
+  });
+
+  // Wire checkbox options — use label click with preventDefault to avoid double-fire
+  document.querySelectorAll('.options[data-type="checkbox"]').forEach(ul => {
+    const qn = parseInt(ul.dataset.q);
+    ul.querySelectorAll('label.opt-label').forEach(lbl => {
+      lbl.addEventListener('click', (e) => {
+        if (submitted) return;
+        e.preventDefault(); // prevent default label->input toggle (avoid double-fire)
+        const inp = lbl.querySelector('input');
+        if (!inp) return;
+        inp.checked = !inp.checked; // manually toggle
+        if (inp.checked) {
+          lbl.classList.add('sel');
+        } else {
+          lbl.classList.remove('sel');
+        }
+        const checked = Array.from(ul.querySelectorAll('input:checked')).map(i=>i.value).sort().join('');
+        if (checked) answers[qn] = checked; else delete answers[qn];
+        updateDots();
+        document.getElementById('navCtr').textContent = `${Object.keys(answers).length}/20 answered`;
+      });
+    });
+  });
+
+  // Numeric input
+  document.querySelectorAll('.num-input').forEach(inp => {
+    inp.addEventListener('input', () => {
+      if (submitted) return;
+      const qn = parseInt(inp.dataset.q);
+      if (inp.value.trim()) answers[qn] = inp.value.trim();
+      else delete answers[qn];
+      updateDots();
+    });
+  });
+
+  // Fraction
+  const fn = document.getElementById('q18num');
+  const fd = document.getElementById('q18den');
+  if (fn && fd) {
+    const upd = () => {
+      if (submitted) return;
+      const n=fn.value.trim(), d=fd.value.trim();
+      if (n&&d) answers[18]=n+'/'+d; else delete answers[18];
+      updateDots();
+    };
+    fn.addEventListener('input', upd);
+    fd.addEventListener('input', upd);
+  }
+}
+
+function restoreAnswer(q) {
+  const qn = q.num;
+  if (answers[qn] === undefined) return;
+  const val = answers[qn];
+
+  // Radio
+  document.querySelectorAll(`.options[data-q="${qn}"][data-type="radio"] label.opt-label`).forEach(lbl => {
+    const inp = lbl.querySelector('input');
+    if (inp && inp.value === val) { lbl.classList.add('sel'); inp.checked = true; }
+  });
+  // Checkbox
+  document.querySelectorAll(`.options[data-q="${qn}"][data-type="checkbox"] label.opt-label`).forEach(lbl => {
+    const inp = lbl.querySelector('input');
+    if (inp && val.includes(inp.value)) { lbl.classList.add('sel'); inp.checked = true; }
+  });
+  // Numeric
+  const ni = document.querySelector(`.num-input[data-q="${qn}"]`);
+  if (ni) ni.value = val;
+  // Fraction
+  if (qn === 18 && val.includes('/')) {
+    const parts = val.split('/');
+    const fn = document.getElementById('q18num');
+    const fd = document.getElementById('q18den');
+    if (fn) fn.value = parts[0];
+    if (fd) fd.value = parts[1];
+  }
+}
+
+// -- NAVIGATION --------------------------------------------
+function go(dir) {
+  const next = cur + dir;
+  if (next < 0 || next >= 20) return;
+  cur = next;
+  renderQ(cur);
+  if (window._reviewMode) setTimeout(showReviewMode, 10);
+}
+
+function jumpTo(idx) {
+  cur = idx;
+  renderQ(cur);
+  if (window._reviewMode) setTimeout(showReviewMode, 10);
+}
+
+function skip() {
+  if (cur < 19) go(1);
+}
+
+function toggleFlag() {
+  const qn = Qs[cur].num;
+  flags[qn] = !flags[qn];
+  const fb = document.getElementById('flagBtn');
+  if (flags[qn]) { fb.classList.add('on'); fb.textContent = ' Marked for Review'; }
+  else { fb.classList.remove('on'); fb.textContent = ' Mark for Review'; }
+  updateDots();
+}
+
+// -- GRADING -----------------------------------------------
+function isCorrect(qnum) {
+  const correct = correctMap[qnum];
+  const given = answers[qnum];
+  if (!given) return false;
+  if (qnum === 15) return parseInt(given) === 7200;
+  if (qnum === 18) {
+    const p = given.replace(/\s/g,'').split('/');
+    if (p.length!==2) return false;
+    return Math.abs(parseFloat(p[0])/parseFloat(p[1]) - 1.5) < 0.001;
+  }
+  return given.toUpperCase() === correct.toUpperCase();
+}
+
+function submitExam() {
+  if (submitted) return;
+  submitted = true;
+  clearInterval(timerInterval);
+  // Firebase: save result (non-blocking)
+  const _fbTid = "t1";
+  const _fbTotal = 20;
+  const _fbAnswers = Object.assign({}, answers);
+  const _fbElapsed = elapsed;
+  const _fbSession = studentSession;
+  setTimeout(() => {
+    if (typeof saveResultToFirebase === "function") {
+      saveResultToFirebase(_fbSession, _fbTid, _fbAnswers, _fbElapsed, isCorrect, _fbTotal);
+    }
+  }, 800);
+  // Results saved to Firebase below
+
+  let correct=0, wrong=0, skipped=0;
+  for (let i=1;i<=20;i++){
+    if (answers[i]===undefined) skipped++;
+    else if (isCorrect(i)) correct++;
+    else wrong++;
+  }
+
+  const pct = Math.round(correct/20*100);
+  const m = Math.floor(elapsed/60), s = elapsed%60;
+
+  document.getElementById('sPct').textContent = pct+'%';
+  document.getElementById('sBar').style.width = pct+'%';
+  document.getElementById('sC').textContent = correct;
+  document.getElementById('sW').textContent = wrong;
+  document.getElementById('sS').textContent = skipped;
+  document.getElementById('sT').textContent = m+'m '+s+'s';
+
+  document.getElementById('qView').style.display = 'none';
+  document.getElementById('scoreScr').classList.add('show');
+  document.getElementById('botNav').style.display = 'none';
+  updateDots();
+  window.scrollTo(0,0);
+}
+
+function startReview() {
+  document.getElementById('scoreScr').classList.remove('show');
+  document.getElementById('qView').style.display = '';
+  document.getElementById('botNav').style.display = '';
+  document.getElementById('btnSubmit').style.display = 'none';
+
+  // Show all explanations after grading
+  cur = 0;
+  renderQ(cur);
+
+  // Show explanation + mark correct/wrong on options
+  showReviewMode();
+}
+
+function showReviewMode() {
+  // Show correct/wrong styling on current question
+  const q = Qs[cur];
+  const qn = q.num;
+  const correct = correctMap[qn];
+
+  document.querySelectorAll('.options').forEach(ul => {
+    const dn = parseInt(ul.dataset.q);
+    const cv = correctMap[dn];
+    ul.querySelectorAll('label.opt-label').forEach(lbl => {
+      const inp = lbl.querySelector('input');
+      if (!inp) return;
+      const v = inp.value;
+      lbl.classList.remove('sel');
+      if (cv && cv.includes(v)) lbl.classList.add('ok');
+      if (answers[dn] && answers[dn].includes(v) && !(cv && cv.includes(v))) lbl.classList.add('bad');
+    });
+  });
+
+  // Show explanation
+  document.querySelectorAll('.explanation').forEach(e => e.classList.add('show'));
+
+  // Nav
+  document.getElementById('btnBack').disabled = (cur === 0);
+  document.getElementById('btnNext').style.display = cur < 19 ? '' : 'none';
+  document.getElementById('btnSkip').style.display = 'none';
+  document.getElementById('btnSubmit').style.display = 'none';
+
+  // Override go to also trigger review mode
+  window._reviewMode = true;
+}
+
+
+
+// -- INIT --------------------------------------------------
+buildDots();
+renderQ(0);
+// Timer starts after login
+
+// STUDENT SESSION
+let studentSession = null;
+
+function submitLogin() {
+  const name = document.getElementById('loginName').value.trim();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const errEl = document.getElementById('loginError');
+  if (!name || !email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    errEl.style.display = 'block';
+    errEl.textContent = !name ? 'Please enter your full name.' : 'Please enter a valid email address.';
+    return;
+  }
+  errEl.style.display = 'none';
+  studentSession = { name, email };
+  document.getElementById('loginOverlay').style.display = 'none';
+  startTimer();
+}
+
+
+
+// Don't auto-start timer  wait for login
+// (startTimer is called from submitLogin)
+
+
+// ================================================================
+// FIREBASE CONFIG — Replace FIREBASE_URL with your project URL
+// Get it from: Firebase Console → Realtime Database → Data tab
+// Example: https://freestudy-hub-12345-default-rtdb.firebaseio.com
+// ================================================================
+const FIREBASE_URL = "https://gregmat26-4ae92-default-rtdb.firebaseio.com";
+
+const db = {
+  async save(path, data) {
+    try {
+      const res = await fetch(FIREBASE_URL + "/" + path + ".json", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    } catch(e) { console.error("Firebase save error:", e); return null; }
+  },
+  async set(path, data) {
+    try {
+      const res = await fetch(FIREBASE_URL + "/" + path + ".json", {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    } catch(e) { console.error("Firebase set error:", e); return null; }
+  },
+  async get(path) {
+    try {
+      const res = await fetch(FIREBASE_URL + "/" + path + ".json");
+      return await res.json();
+    } catch(e) { console.error("Firebase get error:", e); return null; }
+  },
+  async update(path, data) {
+    try {
+      const res = await fetch(FIREBASE_URL + "/" + path + ".json", {
+        method: "PATCH",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    } catch(e) { console.error("Firebase update error:", e); return null; }
+  },
+  async delete(path) {
+    try {
+      await fetch(FIREBASE_URL + "/" + path + ".json", { method: "DELETE" });
+    } catch(e) { console.error("Firebase delete error:", e); }
+  },
+  async getAll(path) {
+    try {
+      const res = await fetch(FIREBASE_URL + "/" + path + ".json");
+      return await res.json();
+    } catch(e) { console.error("Firebase getAll error:", e); return null; }
+  }
+};
+
+// Save result to Firebase
+async function saveResultToFirebase(sessionData, testId, answers, elapsed, isCorrectFn, TOTAL) {
+  console.log("saveResultToFirebase called", sessionData, testId);
+  if (!sessionData) { console.error("No student session"); return; }
+  if (!FIREBASE_URL || FIREBASE_URL.includes("YOUR_FIREBASE_URL")) { console.error("No Firebase URL"); return; }
+  
+  const questionResults = {};
+  let correct = 0, wrong = 0, skipped = 0;
+  for (let i = 1; i <= TOTAL; i++) {
+    const c = isCorrectFn(i);
+    questionResults[i] = c;
+    if (answers[i] === undefined) skipped++;
+    else if (c) correct++;
+    else wrong++;
+  }
+  const score = Math.round(correct / TOTAL * 100);
+  const emailKey = sessionData.email.replace(/[.#$\[\]]/g, "-");
+  const ts = Date.now();
+  const record = {
+    name: sessionData.name,
+    email: sessionData.email,
+    tier: "free",
+    testId: testId,
+    score: score,
+    correct: correct,
+    wrong: wrong,
+    skipped: skipped,
+    timeUsed: elapsed,
+    timestamp: ts,
+    questionResults: questionResults
+  };
+  
+  try {
+    const _auth = (window.FSHAuth ? ("?auth=" + (await FSHAuth.token())) : "");
+    const path = "results/" + emailKey + "/" + testId + "/" + ts;
+    console.log("Saving to path:", path);
+    const res = await fetch(FIREBASE_URL + "/" + path + ".json" + _auth, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(record)
+    });
+    const data = await res.json();
+    if (data && data.error) {
+      console.error("Firebase error:", data.error);
+      alert("Save failed: " + data.error + "\n\nCheck Firebase Rules — set .read and .write to true.");
+    } else {
+      console.log("Saved to Firebase:", score + "% at", path);
+    }
+    // Update student profile
+    await fetch(FIREBASE_URL + "/students/" + emailKey + ".json" + _auth, {
+      method: "PATCH",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ name: sessionData.name, email: sessionData.email, tier: "free", lastSeen: ts })
+    });
+  } catch(e) {
+    console.error("Firebase save exception:", e.message);
+    alert("Could not save result. Check your internet connection.\nError: " + e.message);
+  }
+}
+
+// Hook into submitExam to save to Firebase
+
+</script>
+
+<!-- FreeStudy Hub auth layer -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="fsh-auth.js"></script>
+<script>
+FSHAuth.gate({}).then(function(ctx){
+  var p = ctx.profile || {};
+  if (p.role === 'teacher') { location.replace('teacher.html'); return; }
+  var nm = p.name || ctx.user.email;
+  var ni = document.getElementById('loginName'), ei = document.getElementById('loginEmail');
+  if (ni) { ni.value = nm; ni.readOnly = true; }
+  if (ei) { ei.value = ctx.user.email; ei.readOnly = true; }
+  var sub = document.querySelector('.login-sub');
+  if (sub) { sub.textContent = 'Signed in as ' + ctx.user.email + '. Click below when you are ready to begin.'; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your study hub · FreeStudy Hub GRE</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600&family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+:root{--navy:#0B1F3A;--navy-mid:#1A3558;--blue:#1D4ED8;--teal:#0D9488;--teal2:#2DD4BF;--ink:#1E293B;--muted:#64748B;--line:#E2E8F0;--bg:#F1F5F9;--green:#10B981;--gold:#F59E0B;--rose:#F43F5E;--mono:'DM Mono',monospace;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+.top{background:var(--navy);color:#fff;padding:0 26px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.brandrow{display:flex;align-items:center;gap:11px;}
+.kick{font-weight:800;font-size:14px;letter-spacing:.5px;}
+.kick-sub{font-size:9px;letter-spacing:2px;color:var(--teal2);text-transform:uppercase;}
+.userchip{display:flex;align-items:center;gap:10px;}
+.classtag{font-size:11px;font-weight:600;color:var(--teal2);background:rgba(45,212,191,.12);padding:5px 12px;border-radius:20px;}
+.av{width:34px;height:34px;border-radius:50%;background:var(--teal2);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
+.so{height:36px;padding:0 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+.so:hover{background:rgba(255,255,255,.1);}
+.wrap{max-width:960px;margin:0 auto;padding:40px 24px 80px;animation:fade .25s ease;}
+.hi{font-family:'Source Serif 4',serif;font-weight:600;font-size:32px;letter-spacing:-.01em;margin:0 0 6px;}
+.lead{font-size:15px;color:var(--muted);margin:0 0 30px;}
+
+.sec{margin-bottom:38px;}
+.sechead{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.sectitle{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);}
+.seccount{font-size:11px;font-weight:700;color:var(--muted);background:#E3E8F0;padding:2px 9px;border-radius:20px;}
+.secline{flex:1;height:1px;background:var(--line);}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;}
+.tcard{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:22px;transition:.14s;box-shadow:0 1px 2px rgba(11,31,58,.04);}
+.tcard:hover{border-color:var(--blue);box-shadow:0 10px 28px rgba(11,31,58,.10);transform:translateY(-2px);}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:13px;align-self:flex-start;}
+.b-quant{background:#CCFBF1;color:#0F766E;}.b-verbal{background:#DBEAFE;color:#1D4ED8;}.b-data{background:#FEF3C7;color:#B45309;}
+.b-easy{background:#CCFBF1;color:#0F766E;}.b-med{background:#DBEAFE;color:#1D4ED8;}.b-ets{background:#FEF3C7;color:#B45309;}
+.b-assigned{background:var(--navy);color:#fff;}
+.tname{font-family:'Source Serif 4',serif;font-weight:600;font-size:20px;margin-bottom:6px;line-height:1.25;}
+.tmeta{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px;flex:1;}
+.tfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.tgo{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;color:var(--blue);}
+.scorechip{font-family:var(--mono);font-size:13px;font-weight:600;padding:3px 10px;border-radius:7px;}
+.done-tag{font-size:11px;font-weight:700;color:var(--green);display:inline-flex;align-items:center;gap:4px;}
+
+/* resources */
+.reslist{display:flex;flex-direction:column;gap:10px;}
+.rescard{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:15px 18px;transition:.12s;}
+.rescard:hover{border-color:var(--blue);}
+.resicon{width:42px;height:42px;border-radius:10px;background:#EEF2F7;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.resmain{flex:1;min-width:0;}
+.restitle{font-weight:700;font-size:15px;color:var(--ink);}
+.resnote{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.restype{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);}
+.openbtn{font:inherit;font-weight:700;font-size:13px;padding:9px 16px;border-radius:9px;border:none;background:var(--navy);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.openbtn:hover{background:var(--navy-mid);}
+.donebtn{font:inherit;font-weight:600;font-size:12px;padding:8px 12px;border-radius:9px;border:1.5px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;white-space:nowrap;}
+.donebtn.on{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.08);}
+.openedflag{font-size:11px;color:var(--green);font-weight:600;margin-top:3px;display:inline-flex;align-items:center;gap:4px;}
+
+.banner{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#102a4c,#0B1F3A);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:30px;}
+.banner .bi{font-size:30px;}
+.banner h3{margin:0 0 3px;font-size:17px;font-weight:700;}
+.banner p{margin:0;font-size:13px;color:#9FB3CC;}
+.banner button{margin-left:auto;font:inherit;font-weight:700;font-size:13px;padding:10px 18px;border-radius:10px;border:none;background:var(--teal2);color:var(--navy);cursor:pointer;white-space:nowrap;}
+
+.empty{background:#fff;border:1.5px dashed var(--line);border-radius:16px;padding:32px;text-align:center;color:var(--muted);}
+.empty .ei{font-size:32px;margin-bottom:8px;opacity:.7;}
+.foot{margin-top:34px;font-size:13px;color:var(--muted);}
+.loadrow{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;padding:20px 0;}
+.spin{width:18px;height:18px;border:2.5px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;}
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brandrow">
+    <svg viewBox="0 0 38 44" width="24" height="28"><circle cx="19" cy="6" r="5.5" fill="#2DD4BF"/><path d="M12,14 Q19,10 26,14 L24,23 L14,23 Z" fill="#2DD4BF"/><path d="M7,21 Q13,17 19,21 L19,32 Q13,30 7,32 Z" fill="#2DD4BF"/><path d="M19,21 Q25,17 31,21 L31,32 Q25,30 19,32 Z" fill="#2DD4BF"/></svg>
+    <div><div class="kick">FreeStudy Hub</div><div class="kick-sub">Study Hub</div></div>
+  </div>
+  <div class="userchip">
+    <span class="classtag hidden" id="classtag">—</span>
+    <div class="av" id="av">—</div>
+    <button class="so" onclick="FSHAuth.signOut().then(()=>location.href='index.html')">Sign out</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1 class="hi" id="hi">Your study hub</h1>
+  <p class="lead" id="lead">Loading your assigned mocks and resources…</p>
+
+  <div id="joinBanner"></div>
+
+  <div class="sec" id="assignedSec">
+    <div class="sechead"><span class="sectitle">Assigned to you</span><span class="seccount" id="asgCount">0</span><span class="secline"></span></div>
+    <div id="assignedBody"><div class="loadrow"><div class="spin"></div> Loading…</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sechead"><span class="sectitle">Practice library</span><span class="secline"></span></div>
+    <div class="grid">
+      <a class="tcard" href="section1.html">
+        <span class="badge b-easy">Section 1 · Easy</span>
+        <div class="tname">Quantitative Reasoning I</div>
+        <div class="tmeta">20 questions · 35 minutes · warm-up level. All GRE formats.</div>
+        <div class="tfoot"><span class="tgo">Start →</span></div>
+      </a>
+      <a class="tcard" href="section2.html">
+        <span class="badge b-med">Section 2 · Medium</span>
+        <div class="tname">Quant Challenger II</div>
+        <div class="tmeta">20 questions · 35 minutes · medium difficulty. Exponents, functions, probability.</div>
+        <div class="tfoot"><span class="tgo">Start →</span></div>
+      </a>
+      <a class="tcard" href="set1.html">
+        <span class="badge b-ets">ETS Official · Set 1</span>
+        <div class="tname">ETS Quant Set 1</div>
+        <div class="tmeta">15 questions · 26 minutes · official ETS mixed practice with worked explanations.</div>
+        <div class="tfoot"><span class="tgo">Start →</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="sec" id="resSec">
+    <div class="sechead"><span class="sectitle">Study resources</span><span class="seccount" id="resCount">0</span><span class="secline"></span></div>
+    <div id="resBody"></div>
+  </div>
+
+  <div class="foot">Need help? Contact your instructor, <strong>Leonard Nwosu</strong> — FreeStudy Hub.</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="fsh-auth.js"></script>
+<script src="fsh-data.js"></script>
+<script>
+var ME=null, MY_EMAIL=null, MY_NAME=null, MY_CLASS=null;
+
+FSHAuth.gate({}).then(async function(ctx){
+  var p = ctx.profile || {};
+  if (p.role === 'teacher') { location.replace('teacher.html'); return; }
+  ME=ctx; MY_EMAIL=ctx.user.email; MY_NAME=p.name||ctx.user.email;
+  var first = String(MY_NAME).split(' ')[0];
+  document.getElementById('hi').textContent = 'Welcome, ' + first;
+  document.getElementById('av').textContent = String(MY_NAME).split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();
+  await loadClass();
+  await Promise.all([loadAssigned(), loadResources()]);
+  document.getElementById('lead').textContent = 'Your assigned mocks, practice library and study resources — all in one place.';
+});
+
+async function loadClass(){
+  MY_CLASS = await FSHData.studentClassId(MY_EMAIL);
+  var tag = document.getElementById('classtag');
+  if (MY_CLASS){
+    var c = await FSHData.getClass(MY_CLASS);
+    if (c){ tag.textContent = c.name; tag.classList.remove('hidden'); }
+    document.getElementById('joinBanner').innerHTML='';
+  } else {
+    document.getElementById('joinBanner').innerHTML =
+      '<div class="banner"><div class="bi">🎟️</div><div><h3>Join your class</h3><p>Enter the code your instructor gave you to receive assigned mocks and resources.</p></div><button onclick="joinPrompt()">Enter code</button></div>';
+  }
+}
+async function joinPrompt(){
+  var code = prompt('Class join code (from your instructor):');
+  if(!code) return;
+  var cls = await FSHData.findClassByCode(code.trim());
+  if(!cls){ alert('No class found for that code. Double-check with your instructor.'); return; }
+  await FSHData.joinClass(cls._id, { name:MY_NAME, email:MY_EMAIL });
+  await loadClass(); await loadAssigned(); await loadResources();
+}
+window.joinPrompt=joinPrompt;
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function scoreCol(p){ return p>=70?'var(--green)':p>=50?'var(--teal)':p>=40?'var(--gold)':'var(--rose)'; }
+function secBadge(s){ return s==='verbal'?'b-verbal':s==='data'?'b-data':'b-quant'; }
+function secLabel(s){ return s==='verbal'?'Verbal':s==='data'?'Data Insights':'Quantitative'; }
+
+async function loadAssigned(){
+  var body = document.getElementById('assignedBody');
+  var asgs = await FSHData.assignmentsForStudent(MY_EMAIL);
+  // de-dupe by mockId (latest assignment wins)
+  var seen={}, list=[];
+  asgs.forEach(function(a){ if(!seen[a.mockId]){ seen[a.mockId]=true; list.push(a); } });
+  document.getElementById('asgCount').textContent = list.length;
+  if (!list.length){
+    body.innerHTML = '<div class="empty"><div class="ei">📭</div><div>No mocks assigned yet. Your instructor will send them here — meanwhile, try the practice library below.</div></div>';
+    return;
+  }
+  var cards = [];
+  for (var i=0;i<list.length;i++){
+    var a = list[i];
+    var mock = await FSHData.getMock(a.mockId);
+    if (!mock) continue;
+    var best = await FSHData.bestResultFor(MY_EMAIL, a.mockId);
+    var done = !!(best && typeof best.score === 'number');
+    var meta = (mock.questionCount||0)+' questions · '+(mock.timeLimit?mock.timeLimit+' min':'untimed')+(mock.desc?' · '+esc(mock.desc):'');
+    cards.push('<a class="tcard" href="mock.html?id='+a.mockId+'&a='+a._id+'">'+
+      '<span class="badge b-assigned">⬤ Assigned · '+secLabel(mock.section)+'</span>'+
+      '<div class="tname">'+esc(mock.title)+'</div>'+
+      '<div class="tmeta">'+meta+'</div>'+
+      '<div class="tfoot"><span class="tgo">'+(done?'Retake':'Start')+' →</span>'+
+      (done?'<span class="scorechip" style="background:rgba(16,185,129,.12);color:'+scoreCol(best.score)+'">Best '+best.score+'%</span>':'<span class="done-tag" style="color:var(--rose);">● Not started</span>')+
+      '</div></a>');
+  }
+  body.innerHTML = '<div class="grid">'+cards.join('')+'</div>';
+}
+
+async function loadResources(){
+  var sec = document.getElementById('resSec');
+  var body = document.getElementById('resBody');
+  var all = await FSHData.listResources();
+  var list = all.filter(function(r){ return !r.classId || r.classId===MY_CLASS; });
+  document.getElementById('resCount').textContent = list.length;
+  if (!list.length){ sec.classList.add('hidden'); return; }
+  sec.classList.remove('hidden');
+  var eng = await FSHData.engagementFor(MY_EMAIL);
+  var icons={video:'▶️',article:'📄',pdf:'📕',practice:'✏️',link:'🔗'};
+  body.innerHTML = '<div class="reslist">'+list.map(function(r){
+    var e = eng[r._id]||null;
+    var opened = !!e;
+    return '<div class="rescard" id="res-'+r._id+'"><div class="resicon">'+(icons[r.type]||'🔗')+'</div>'+
+      '<div class="resmain"><div class="restype">'+esc(r.type||'link')+'</div><div class="restitle">'+esc(r.title)+'</div>'+
+      (r.note?'<div class="resnote">'+esc(r.note)+'</div>':'')+
+      (opened?'<div class="openedflag" id="flag-'+r._id+'">✓ Opened'+(e.opens>1?' '+e.opens+'×':'')+'</div>':'')+'</div>'+
+      '<button class="donebtn'+(e&&e.completed?' on':'')+'" id="done-'+r._id+'" onclick="toggleDone(\''+r._id+'\')">'+(e&&e.completed?'✓ Done':'Mark done')+'</button>'+
+      '<a class="openbtn" href="'+esc(r.url)+'" target="_blank" rel="noopener" onclick="trackRes(\''+r._id+'\')">Open ↗</a></div>';
+  }).join('')+'</div>';
+}
+async function trackRes(id){
+  try{ await FSHData.trackOpen(MY_EMAIL, id);
+    var f=document.getElementById('flag-'+id);
+    if(!f){ var card=document.getElementById('res-'+id); var main=card.querySelector('.resmain'); var d=document.createElement('div'); d.className='openedflag'; d.id='flag-'+id; d.textContent='✓ Opened'; main.appendChild(d); }
+  }catch(e){ console.error(e); }
+}
+async function toggleDone(id){
+  var btn=document.getElementById('done-'+id);
+  var nowOn = !btn.classList.contains('on');
+  btn.classList.toggle('on', nowOn);
+  btn.textContent = nowOn?'✓ Done':'Mark done';
+  try{ await FSHData.trackOpen(MY_EMAIL, id); await FSHData.markComplete(MY_EMAIL, id, nowOn); }catch(e){ console.error(e); }
+}
+window.trackRes=trackRes;window.toggleDone=toggleDone;
+</script>
+</body>
+</html>

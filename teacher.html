@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeStudy Hub · Instructor Console</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+:root{--navy:#0B1F3A;--navy2:#132840;--navy3:#1A3558;--teal:#0D9488;--teal2:#2DD4BF;--blue:#1D4ED8;--gold:#F59E0B;--rose:#F43F5E;--green:#10B981;--purple:#8B5CF6;--bg:#07131F;--surface:#0F2336;--card:#142B42;--card2:#19324C;--border:#1E3A52;--text:#E2EAF4;--muted:#6B8BAA;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.hidden{display:none!important;}
+a{color:inherit;text-decoration:none;}
+
+/* top nav */
+.topnav{background:var(--navy);border-bottom:1px solid var(--border);padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--teal),var(--blue));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.brand-text{font-weight:800;font-size:15px;letter-spacing:1px;color:#fff;text-transform:uppercase;white-space:nowrap;line-height:1.15;}
+.brand-sub{font-size:9px;letter-spacing:2px;color:var(--teal2);text-transform:uppercase;white-space:nowrap;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-link{font-size:12px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:7px;cursor:pointer;}
+.nav-link:hover{color:var(--teal2);background:rgba(45,212,191,.08);}
+.who{font-size:12px;color:var(--muted);}
+.who b{color:#fff;}
+
+/* layout */
+.layout{display:flex;min-height:calc(100vh - 56px);}
+.sidebar{width:215px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:18px 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;}
+.side-sec{padding:0 14px;margin-bottom:20px;}
+.side-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:0 6px 8px;}
+.side-item{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:2px;}
+.side-item:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.side-item.active{background:rgba(45,212,191,.12);color:var(--teal2);}
+.side-item .ic{font-size:15px;width:18px;text-align:center;}
+.side-item .badge{margin-left:auto;background:var(--card2);color:var(--muted);font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;}
+.side-item.active .badge{background:var(--teal);color:#fff;}
+
+.content{flex:1;padding:26px 28px 70px;max-width:1180px;}
+.phead{margin-bottom:22px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.ptitle{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+.psub{font-size:13px;color:var(--muted);margin-top:3px;}
+
+/* buttons */
+.btn{font:inherit;font-weight:600;font-size:13px;padding:9px 16px;border-radius:9px;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--text);display:inline-flex;align-items:center;gap:7px;}
+.btn:hover{border-color:var(--teal2);color:var(--teal2);}
+.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff;}
+.btn.primary:hover{background:#0fb3a3;color:#fff;}
+.btn.blue{background:var(--blue);border-color:var(--blue);color:#fff;}
+.btn.ghost{background:transparent;}
+.btn.sm{padding:6px 11px;font-size:12px;}
+.btn.danger:hover{border-color:var(--rose);color:var(--rose);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* cards / grid */
+.grid{display:grid;gap:14px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px;}
+.card.hov{cursor:pointer;transition:border-color .15s,transform .15s;}
+.card.hov:hover{border-color:var(--teal2);transform:translateY(-2px);}
+.muted{color:var(--muted);}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--card2);color:var(--muted);}
+.pill.teal{background:rgba(45,212,191,.14);color:var(--teal2);}
+.pill.blue{background:rgba(29,78,216,.18);color:#7AA2F7;}
+.pill.gold{background:rgba(245,158,11,.16);color:#FCD34D;}
+.pill.rose{background:rgba(244,63,94,.16);color:#FB7185;}
+.pill.green{background:rgba(16,185,129,.16);color:#34D399;}
+
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:13px;margin-bottom:22px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--teal2);}
+.stat.b::before{background:var(--blue);}.stat.g::before{background:var(--gold);}.stat.r::before{background:var(--rose);}.stat.gr::before{background:var(--green);}
+.stat .v{font-size:27px;font-weight:800;color:#fff;line-height:1;}
+.stat .l{font-size:10.5px;font-weight:600;letter-spacing:.6px;color:var(--muted);text-transform:uppercase;margin-top:7px;}
+
+/* table */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--surface);padding:10px 15px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:11px 15px;border-bottom:1px solid rgba(30,58,82,.6);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;}
+.scell{display:flex;align-items:center;gap:10px;}
+.sname{font-weight:600;color:#fff;}
+.semail{font-size:11px;color:var(--muted);}
+.bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;min-width:70px;}
+.bar>div{height:100%;border-radius:4px;}
+
+/* inputs */
+.inp,.sel,.ta{width:100%;font:inherit;font-size:14px;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);outline:none;}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--teal2);}
+.ta{resize:vertical;min-height:64px;line-height:1.5;}
+.lab{font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;display:block;}
+.row{display:flex;gap:12px;}
+.row>*{flex:1;}
+.field{margin-bottom:15px;}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(3,9,16,.72);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(2px);}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;animation:fade .2s ease;}
+.modal.wide{max-width:900px;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);border-radius:16px 16px 0 0;z-index:2;}
+.modal-head h3{font-size:16px;color:#fff;font-weight:700;}
+.x{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;}
+.x:hover{color:#fff;}
+.modal-body{padding:22px;}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--surface);border-radius:0 0 16px 16px;}
+
+/* builder question card */
+.qcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;}
+.qcard-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;gap:10px;}
+.qcard-head .n{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--teal2);}
+.opt-edit{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.opt-edit .mark{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--surface);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);}
+.opt-edit .mark.on{border-color:var(--green);background:var(--green);color:#fff;}
+.opt-edit.multi .mark{border-radius:7px;}
+.opt-edit input{flex:1;}
+.opt-edit .del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;}
+.opt-edit .del:hover{color:var(--rose);}
+
+.empty{text-align:center;padding:46px 20px;color:var(--muted);}
+.empty .ei{font-size:38px;margin-bottom:10px;opacity:.7;}
+.empty .et{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
+
+.code-box{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:5px;color:var(--teal2);background:var(--bg);border:1px dashed var(--teal);border-radius:11px;padding:14px 18px;text-align:center;}
+.checkrow{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);border-radius:9px;margin-bottom:7px;cursor:pointer;background:var(--card);}
+.checkrow:hover{border-color:var(--teal2);}
+.checkrow.on{border-color:var(--teal);background:rgba(13,148,136,.1);}
+.checkrow input{width:17px;height:17px;accent-color:var(--teal);}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-weight:600;font-size:13px;padding:11px 20px;border-radius:10px;z-index:400;box-shadow:0 6px 24px rgba(0,0,0,.4);animation:fade .2s ease;}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:3px;gap:2px;}
+.seg button{font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border:none;border-radius:6px;background:transparent;color:var(--muted);cursor:pointer;}
+.seg button.on{background:var(--card2);color:#fff;}
+.dotg{width:9px;height:9px;border-radius:50%;display:inline-block;}
+</style>
+</head>
+<body>
+
+<div id="boot" style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--muted);gap:12px;">
+  <div style="width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--teal2);border-radius:50%;animation:spin .7s linear infinite;"></div> Loading console…
+</div>
+
+<div id="app" class="hidden">
+  <div class="topnav">
+    <div class="brand">
+      <div class="brand-icon">🎓</div>
+      <div><div class="brand-text">FreeStudy Hub</div><div class="brand-sub">Instructor Console</div></div>
+    </div>
+    <div class="nav-right">
+      <a class="nav-link" href="dashboard.html">📊 Analytics</a>
+      <span class="who">Signed in as <b id="whoName">—</b></span>
+      <button class="nav-link" onclick="FSHAuth.signOut().then(function(){location.href='index.html';})">Sign out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-sec">
+        <div class="side-label">Teaching</div>
+        <div class="side-item active" data-view="overview" onclick="nav('overview')"><span class="ic">🏠</span> Overview</div>
+        <div class="side-item" data-view="mocks" onclick="nav('mocks')"><span class="ic">📝</span> Mocks <span class="badge" id="bMocks">0</span></div>
+        <div class="side-item" data-view="assign" onclick="nav('assign')"><span class="ic">📤</span> Assignments <span class="badge" id="bAsg">0</span></div>
+      </div>
+      <div class="side-sec">
+        <div class="side-label">People</div>
+        <div class="side-item" data-view="classes" onclick="nav('classes')"><span class="ic">👥</span> Classes <span class="badge" id="bCls">0</span></div>
+        <div class="side-item" data-view="followup" onclick="nav('followup')"><span class="ic">🔔</span> Follow-up <span class="badge" id="bFollow">0</span></div>
+      </div>
+      <div class="side-sec">
+        <div class="side-label">Study</div>
+        <div class="side-item" data-view="resources" onclick="nav('resources')"><span class="ic">📚</span> Resources <span class="badge" id="bRes">0</span></div>
+      </div>
+    </aside>
+
+    <main class="content" id="main"></main>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="fsh-auth.js"></script>
+<script src="fsh-data.js"></script>
+<script>
+var ME = null, STATE = { classes:[], mocks:[], assignments:[], resources:[], activeClass:null, view:"overview" };
+
+FSHAuth.gate({ role:"teacher" }).then(async function(ctx){
+  ME = ctx;
+  document.getElementById("whoName").textContent = (ctx.profile && ctx.profile.name) || ctx.user.email;
+  document.getElementById("boot").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  await refreshAll();
+  nav("overview");
+});
+
+async function refreshAll(){
+  STATE.classes = await FSHData.listClasses();
+  STATE.mocks = await FSHData.listMocks();
+  STATE.assignments = await FSHData.listAssignments();
+  STATE.resources = await FSHData.listResources();
+  if (!STATE.activeClass && STATE.classes.length) STATE.activeClass = STATE.classes[0]._id;
+  document.getElementById("bMocks").textContent = STATE.mocks.length;
+  document.getElementById("bAsg").textContent = STATE.assignments.length;
+  document.getElementById("bCls").textContent = STATE.classes.length;
+  document.getElementById("bRes").textContent = STATE.resources.length;
+}
+
+function nav(view){
+  STATE.view = view;
+  document.querySelectorAll(".side-item").forEach(function(el){ el.classList.toggle("active", el.dataset.view===view); });
+  var fn = ({ overview:viewOverview, mocks:viewMocks, assign:viewAssign, classes:viewClasses, resources:viewResources, followup:viewFollowup })[view];
+  if (fn) fn();
+}
+
+/* ============ helpers ============ */
+function el(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function initials(n){ n=(n||"?").trim().split(/\s+/); return ((n[0]||"")[0]||"")+((n[1]||"")[0]||""); }
+function avColor(s){ var h=0; s=s||""; for(var i=0;i<s.length;i++)h=s.charCodeAt(i)+((h<<5)-h); var c=["#0D9488","#1D4ED8","#8B5CF6","#F59E0B","#F43F5E","#10B981","#06B6D4"]; return c[Math.abs(h)%c.length]; }
+function fmtDate(t){ if(!t)return "—"; var d=new Date(t); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+function toast(msg){ var t=document.createElement("div"); t.className="toast"; t.textContent=msg; el("toastRoot").appendChild(t); setTimeout(function(){t.remove();},2400); }
+function scoreCol(p){ return p>=70?"var(--green)":p>=50?"var(--teal2)":p>=40?"var(--gold)":"var(--rose)"; }
+function closeModal(){ el("modalRoot").innerHTML=""; }
+function activeClassObj(){ return STATE.classes.find(function(c){return c._id===STATE.activeClass;})||null; }
+function typeName(t){ return ({mc:"Multiple choice",multi:"Multiple answer",numeric:"Numeric entry",qc:"Quantitative comparison"})[t]||t; }
+
+function classPicker(){
+  if (!STATE.classes.length) return "";
+  return '<div class="seg" style="margin-bottom:16px;">'+STATE.classes.map(function(c){
+    return '<button class="'+(c._id===STATE.activeClass?"on":"")+'" onclick="setClass(\''+c._id+'\')">'+esc(c.name)+'</button>';
+  }).join("")+'</div>';
+}
+function setClass(id){ STATE.activeClass=id; nav(STATE.view); }
+window.setClass=setClass;
+
+/* ============ data aggregation ============ */
+async function loadClassData(classId){
+  // roster + each student's results + engagement
+  var roster = classId ? await FSHData.classRoster(classId) : [];
+  var eng = await FSHData.allEngagement();
+  var students = [];
+  for (var i=0;i<roster.length;i++){
+    var r = roster[i];
+    var results = await FSHData.resultsForStudent(r.email);
+    var scores = results.map(function(x){return x.score;});
+    var avg = scores.length ? Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length) : null;
+    var best = scores.length ? Math.max.apply(null,scores) : null;
+    var latest = results.length ? results[0].score : null;
+    var trend = "flat";
+    if (results.length>=2){ var ch=results[0].score - results[results.length-1].score; trend = ch>4?"up":ch<-4?"down":"flat"; }
+    students.push({ name:r.name, email:r.email, emailKey:r.emailKey, results:results, count:results.length,
+      avg:avg, best:best, latest:latest, trend:trend, engagement:eng[r.emailKey]||{} });
+  }
+  return { roster:roster, students:students, eng:eng };
+}
+
+/* ============ OVERVIEW ============ */
+async function viewOverview(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Overview</div><div class="psub">Your classroom at a glance</div></div>'+
+    '<div style="display:flex;gap:10px;"><button class="btn" onclick="openMockEditor()">＋ New mock</button><button class="btn primary" onclick="openAssign()">📤 Assign a mock</button></div></div>'+
+    '<div id="ovStats" class="stats"></div>'+
+    '<div class="grid" style="grid-template-columns:1.4fr 1fr;gap:16px;align-items:start;">'+
+      '<div><div class="phead" style="margin-bottom:12px;"><div class="ptitle" style="font-size:15px;">Needs follow-up</div></div><div id="ovFollow"></div></div>'+
+      '<div><div class="phead" style="margin-bottom:12px;"><div class="ptitle" style="font-size:15px;">Recent assignments</div></div><div id="ovAsg"></div></div>'+
+    '</div>';
+
+  var data = await loadClassData(STATE.activeClass);
+  var students = data.students;
+  var totalStudents = students.length;
+  var avgAll = students.filter(function(s){return s.avg!=null;});
+  var classAvg = avgAll.length ? Math.round(avgAll.reduce(function(a,b){return a+b.avg;},0)/avgAll.length) : 0;
+  var atRisk = students.filter(function(s){return s.avg!=null && s.avg<40;}).length;
+  var inactive = students.filter(function(s){ return Object.keys(s.engagement).length===0 && s.count===0; }).length;
+
+  el("ovStats").innerHTML =
+    statCard("",totalStudents,"Students","") +
+    statCard("gr",classAvg+"%","Class average","") +
+    statCard("b",STATE.mocks.length,"Mocks built","") +
+    statCard("g",STATE.assignments.length,"Assignments sent","") +
+    statCard("r",atRisk,"At risk (<40%)","");
+
+  // follow-up preview
+  var flagged = computeFollowup(students,data.eng);
+  el("ovFollow").innerHTML = flagged.length ? '<div class="tbl-wrap"><table><tbody>'+flagged.slice(0,6).map(function(f){
+    return '<tr><td><div class="scell"><div class="avatar" style="background:'+avColor(f.email)+'">'+esc(initials(f.name))+'</div><div><div class="sname">'+esc(f.name)+'</div><div class="semail">'+f.reason+'</div></div></div></td>'+
+      '<td style="text-align:right;"><button class="btn sm" onclick="openStudent(\''+f.emailKey+'\')">View</button></td></tr>';
+  }).join("")+'</tbody></table></div>' : emptyBox("✅","Everyone's on track","No students need follow-up right now.");
+
+  el("ovAsg").innerHTML = STATE.assignments.length ? STATE.assignments.slice(0,5).map(function(a){
+    return '<div class="card" style="padding:13px 15px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-weight:600;color:#fff;font-size:13px;">'+esc(a.mockTitle||"Mock")+'</div><div class="muted" style="font-size:11px;">'+(a.target&&a.target.type==="students"?"Specific students":"Whole class")+' · '+fmtDate(a.createdAt)+'</div></div><span class="pill teal">'+(a.target&&a.target.type==="students"?Object.keys(a.target.emailKeys||{}).length+" sent":"Class")+'</span></div></div>';
+  }).join("") : emptyBox("📤","No assignments yet","Build a mock, then assign it to your class.");
+}
+function statCard(cls,v,l){ return '<div class="stat '+cls+'"><div class="v">'+v+'</div><div class="l">'+l+'</div></div>'; }
+function emptyBox(i,t,s){ return '<div class="card"><div class="empty"><div class="ei">'+i+'</div><div class="et">'+t+'</div><div class="muted" style="font-size:12.5px;">'+s+'</div></div></div>'; }
+
+/* ============ MOCKS LIST ============ */
+function viewMocks(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Mocks</div><div class="psub">Author timed practice tests, then assign them.</div></div>'+
+    '<button class="btn primary" onclick="openMockEditor()">＋ New mock</button></div>'+
+    (STATE.mocks.length ? '<div class="cards" id="mockCards"></div>' : emptyBox("📝","No mocks yet","Create your first mock — add questions, set a timer, and send it to your class."));
+  if (!STATE.mocks.length) return;
+  el("mockCards").innerHTML = STATE.mocks.map(function(mk){
+    var secColor = mk.section==="verbal"?"blue":mk.section==="data"?"gold":"teal";
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;">'+
+      '<div style="font-weight:700;color:#fff;font-size:15px;line-height:1.3;">'+esc(mk.title)+'</div>'+
+      '<span class="pill '+secColor+'">'+(mk.section==="verbal"?"Verbal":mk.section==="data"?"Data":"Quant")+'</span></div>'+
+      '<div class="muted" style="font-size:12.5px;min-height:34px;">'+esc(mk.desc||"No description")+'</div>'+
+      '<div style="display:flex;gap:14px;margin:13px 0;font-size:12px;" class="muted">'+
+        '<span>📋 '+(mk.questionCount||0)+' questions</span>'+(mk.timeLimit?'<span>⏱ '+mk.timeLimit+' min</span>':'<span>⏱ Untimed</span>')+'</div>'+
+      '<div style="display:flex;gap:8px;">'+
+        '<button class="btn sm primary" style="flex:1;justify-content:center;" onclick="openAssign(\''+mk._id+'\')">Assign</button>'+
+        '<button class="btn sm" onclick="openMockEditor(\''+mk._id+'\')">Edit</button>'+
+        '<a class="btn sm" href="mock.html?id='+mk._id+'" target="_blank" title="Preview">▶</a>'+
+        '<button class="btn sm danger" onclick="delMock(\''+mk._id+'\')">🗑</button>'+
+      '</div></div>';
+  }).join("");
+}
+async function delMock(id){ if(!confirm("Delete this mock? Existing results are kept."))return; await FSHData.deleteMock(id); await refreshAll(); viewMocks(); toast("Mock deleted"); }
+window.delMock=delMock;
+
+/* ============ MOCK EDITOR (builder) ============ */
+var EDIT = null;
+async function openMockEditor(id){
+  if (id){ EDIT = JSON.parse(JSON.stringify(await FSHData.getMock(id))); EDIT._id = id; }
+  else { EDIT = { title:"", desc:"", section:"quant", timeLimit:20, questions:[ blankQ("mc") ] }; }
+  renderEditor();
+}
+function blankQ(type){
+  var q = { type:type, stem:"", explanation:"", tags:[], passage:"" };
+  if (type==="mc"||type==="multi"){ q.options=["","","",""]; q.answer = type==="multi"?[]:0; }
+  else if (type==="numeric"){ q.answer=""; }
+  else if (type==="qc"){ q.quantA=""; q.quantB=""; q.answer=0; }
+  return q;
+}
+function renderEditor(){
+  var qs = EDIT.questions.map(function(q,i){ return qEditor(q,i); }).join("");
+  el("modalRoot").innerHTML =
+  '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal wide">'+
+    '<div class="modal-head"><h3>'+(EDIT._id?"Edit mock":"New mock")+'</h3><button class="x" onclick="closeModal()">×</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="row"><div class="field" style="flex:2;"><label class="lab">Title</label><input class="inp" id="eTitle" value="'+esc(EDIT.title)+'" placeholder="e.g. Quant Mock 4 — Algebra focus"></div>'+
+        '<div class="field"><label class="lab">Section</label><select class="sel" id="eSection">'+
+          ['quant|Quantitative','verbal|Verbal','data|Data Insights'].map(function(o){var p=o.split("|");return '<option value="'+p[0]+'"'+(EDIT.section===p[0]?" selected":"")+'>'+p[1]+'</option>';}).join("")+
+        '</select></div>'+
+        '<div class="field" style="flex:.6;"><label class="lab">Time (min)</label><input class="inp" id="eTime" type="number" min="0" value="'+(EDIT.timeLimit||0)+'"></div></div>'+
+      '<div class="field"><label class="lab">Description <span class="muted" style="text-transform:none;font-weight:400;">(shown to students)</span></label><input class="inp" id="eDesc" value="'+esc(EDIT.desc)+'" placeholder="Short description"></div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin:18px 0 12px;"><div class="lab" style="margin:0;">Questions ('+EDIT.questions.length+')</div></div>'+
+      '<div id="qList">'+qs+'</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">'+
+        '<button class="btn sm" onclick="addQ(\'mc\')">＋ Multiple choice</button>'+
+        '<button class="btn sm" onclick="addQ(\'multi\')">＋ Multiple answer</button>'+
+        '<button class="btn sm" onclick="addQ(\'numeric\')">＋ Numeric entry</button>'+
+        '<button class="btn sm" onclick="addQ(\'qc\')">＋ Quant comparison</button></div>'+
+    '</div>'+
+    '<div class="modal-foot"><span class="muted" style="margin-right:auto;font-size:12px;align-self:center;">Tip: use $x^2$ or \\(\\frac{a}{b}\\) for math.</span><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveMockFromEditor()">Save mock</button></div>'+
+  '</div></div>';
+}
+function qEditor(q,i){
+  var body = "";
+  var passToggle = '<div class="field"><label class="lab">Passage / setup <span class="muted" style="text-transform:none;font-weight:400;">(optional — shown above the question)</span></label><textarea class="ta" data-q="'+i+'" data-f="passage" placeholder="Leave blank if not needed" style="min-height:48px;">'+esc(q.passage||"")+'</textarea></div>';
+  if (q.type==="qc"){
+    body = '<div class="row"><div class="field"><label class="lab">Quantity A</label><input class="inp" data-q="'+i+'" data-f="quantA" value="'+esc(q.quantA||"")+'"></div>'+
+           '<div class="field"><label class="lab">Quantity B</label><input class="inp" data-q="'+i+'" data-f="quantB" value="'+esc(q.quantB||"")+'"></div></div>'+
+           '<div class="field"><label class="lab">Correct answer</label><select class="sel" data-q="'+i+'" data-f="answer-int">'+
+             ['Quantity A is greater','Quantity B is greater','The two quantities are equal','Cannot be determined'].map(function(o,k){return '<option value="'+k+'"'+(q.answer===k?" selected":"")+'>'+o+'</option>';}).join("")+'</select></div>';
+  } else if (q.type==="numeric"){
+    body = '<div class="field"><label class="lab">Question</label><textarea class="ta" data-q="'+i+'" data-f="stem" placeholder="Enter the question…">'+esc(q.stem||"")+'</textarea></div>'+
+           '<div class="field" style="max-width:260px;"><label class="lab">Correct answer (number)</label><input class="inp" data-q="'+i+'" data-f="answer" value="'+esc(q.answer||"")+'" placeholder="e.g. 42 or 3.5"></div>';
+  } else {
+    var multi = q.type==="multi";
+    body = '<div class="field"><label class="lab">Question</label><textarea class="ta" data-q="'+i+'" data-f="stem" placeholder="Enter the question…">'+esc(q.stem||"")+'</textarea></div>'+
+           '<label class="lab">Options <span class="muted" style="text-transform:none;font-weight:400;">(click the circle to mark '+(multi?"all correct answers":"the correct answer")+')</span></label>'+
+           (q.options||[]).map(function(o,k){
+              var on = multi ? (Array.isArray(q.answer)&&q.answer.indexOf(k)>-1) : (q.answer===k);
+              return '<div class="opt-edit'+(multi?" multi":"")+'"><button class="mark'+(on?" on":"")+'" onclick="markCorrect('+i+','+k+')">'+(on?"✓":String.fromCharCode(65+k))+'</button>'+
+                '<input class="inp" data-q="'+i+'" data-f="opt-'+k+'" value="'+esc(o)+'" placeholder="Option '+String.fromCharCode(65+k)+'">'+
+                '<button class="del" onclick="delOpt('+i+','+k+')" title="Remove">✕</button></div>';
+           }).join("")+
+           '<button class="btn sm ghost" style="margin-top:4px;" onclick="addOpt('+i+')">＋ Add option</button>';
+  }
+  return '<div class="qcard">'+
+    '<div class="qcard-head"><span class="n">Q'+(i+1)+' · '+typeName(q.type)+'</span>'+
+      '<div style="display:flex;gap:6px;"><button class="btn sm ghost" onclick="moveQ('+i+',-1)" '+(i===0?"disabled":"")+'>↑</button>'+
+      '<button class="btn sm ghost" onclick="moveQ('+i+',1)" '+(i===EDIT.questions.length-1?"disabled":"")+'>↓</button>'+
+      '<button class="btn sm danger ghost" onclick="delQ('+i+')">🗑</button></div></div>'+
+    passToggle + body +
+    '<div class="row" style="margin-top:13px;"><div class="field" style="margin:0;"><label class="lab">Explanation <span class="muted" style="text-transform:none;font-weight:400;">(shown in review)</span></label><textarea class="ta" data-q="'+i+'" data-f="explanation" style="min-height:48px;">'+esc(q.explanation||"")+'</textarea></div>'+
+    '<div class="field" style="margin:0;max-width:240px;"><label class="lab">Topic tags <span class="muted" style="text-transform:none;font-weight:400;">(comma sep)</span></label><input class="inp" data-q="'+i+'" data-f="tags" value="'+esc((q.tags||[]).join(", "))+'" placeholder="Algebra, Geometry"></div></div>'+
+  '</div>';
+}
+function syncEditorDOM(){
+  // pull all field values from DOM into EDIT before re-render
+  EDIT.title = (el("eTitle")||{}).value ?? EDIT.title;
+  EDIT.desc = (el("eDesc")||{}).value ?? EDIT.desc;
+  EDIT.section = (el("eSection")||{}).value ?? EDIT.section;
+  EDIT.timeLimit = Number((el("eTime")||{}).value) || 0;
+  document.querySelectorAll("[data-q]").forEach(function(node){
+    var i = +node.dataset.q, f = node.dataset.f, q = EDIT.questions[i]; if(!q)return;
+    if (f==="tags") q.tags = node.value.split(",").map(function(s){return s.trim();}).filter(Boolean);
+    else if (f.indexOf("opt-")===0){ q.options[+f.split("-")[1]] = node.value; }
+    else if (f==="answer-int") q.answer = +node.value;
+    else q[f] = node.value;
+  });
+}
+function addQ(t){ syncEditorDOM(); EDIT.questions.push(blankQ(t)); renderEditor(); var l=el("qList"); l.scrollTop=l.scrollHeight; }
+function delQ(i){ if(EDIT.questions.length<=1){toast("A mock needs at least one question");return;} syncEditorDOM(); EDIT.questions.splice(i,1); renderEditor(); }
+function moveQ(i,d){ syncEditorDOM(); var n=i+d; if(n<0||n>=EDIT.questions.length)return; var t=EDIT.questions[i];EDIT.questions[i]=EDIT.questions[n];EDIT.questions[n]=t; renderEditor(); }
+function addOpt(i){ syncEditorDOM(); EDIT.questions[i].options.push(""); renderEditor(); }
+function delOpt(i,k){ syncEditorDOM(); var q=EDIT.questions[i]; if(q.options.length<=2){toast("Keep at least two options");return;} q.options.splice(k,1); if(q.type==="multi"){q.answer=(q.answer||[]).filter(function(x){return x!==k;}).map(function(x){return x>k?x-1:x;});} else if(q.answer>=q.options.length)q.answer=0; renderEditor(); }
+function markCorrect(i,k){ syncEditorDOM(); var q=EDIT.questions[i]; if(q.type==="multi"){ q.answer=Array.isArray(q.answer)?q.answer:[]; var idx=q.answer.indexOf(k); if(idx>-1)q.answer.splice(idx,1); else q.answer.push(k);} else q.answer=k; renderEditor(); }
+async function saveMockFromEditor(){
+  syncEditorDOM();
+  if(!EDIT.title.trim()){toast("Give your mock a title");return;}
+  for(var i=0;i<EDIT.questions.length;i++){ var q=EDIT.questions[i];
+    if(q.type!=="qc" && !(q.stem||"").trim()){toast("Q"+(i+1)+" needs a question");return;}
+  }
+  await FSHData.saveMock(EDIT, EDIT._id);
+  closeModal(); await refreshAll(); nav(STATE.view==="overview"?"overview":"mocks"); toast("Mock saved ✓");
+}
+window.openMockEditor=openMockEditor;window.addQ=addQ;window.delQ=delQ;window.moveQ=moveQ;window.addOpt=addOpt;window.delOpt=delOpt;window.markCorrect=markCorrect;window.saveMockFromEditor=saveMockFromEditor;
+
+/* ============ ASSIGN ============ */
+async function viewAssign(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Assignments</div><div class="psub">Send a mock to a class or specific students, and track who has finished.</div></div>'+
+    '<button class="btn primary" onclick="openAssign()">📤 New assignment</button></div>'+
+    classPicker()+'<div id="asgList"></div>';
+  await renderAssignList();
+}
+async function renderAssignList(){
+  var asgs = STATE.assignments.filter(function(a){ return !STATE.activeClass || !a.classId || a.classId===STATE.activeClass; });
+  if (!asgs.length){ el("asgList").innerHTML = emptyBox("📤","No assignments yet","Pick a mock and assign it to start tracking completion."); return; }
+  var data = await loadClassData(STATE.activeClass);
+  el("asgList").innerHTML = '<div class="grid">'+asgs.map(function(a){
+    var targets = a.target&&a.target.type==="students" ? data.students.filter(function(s){return a.target.emailKeys&&a.target.emailKeys[s.emailKey];}) : data.students;
+    var done = targets.filter(function(s){ return s.results.some(function(r){return r.testId===a.mockId;}); });
+    var pct = targets.length ? Math.round(done.length/targets.length*100) : 0;
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;">'+
+      '<div><div style="font-weight:700;color:#fff;font-size:15px;">'+esc(a.mockTitle||"Mock")+'</div>'+
+      '<div class="muted" style="font-size:12px;margin-top:2px;">'+(a.target&&a.target.type==="students"?"Specific students":"Whole class")+' · sent '+fmtDate(a.createdAt)+'</div></div>'+
+      '<div style="display:flex;gap:6px;"><a class="btn sm" href="mock.html?id='+a.mockId+'&a='+a._id+'" target="_blank">Preview</a><button class="btn sm danger" onclick="delAsg(\''+a._id+'\')">🗑</button></div></div>'+
+      '<div style="display:flex;align-items:center;gap:12px;"><div class="bar" style="flex:1;height:8px;"><div style="width:'+pct+'%;background:'+scoreCol(pct)+'"></div></div>'+
+      '<span style="font-family:var(--mono);font-size:13px;font-weight:600;">'+done.length+'/'+targets.length+' done</span></div>'+
+      (targets.length?('<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;">'+targets.map(function(s){
+        var fin = s.results.find(function(r){return r.testId===a.mockId;});
+        return '<span class="pill '+(fin?"green":"")+'" title="'+esc(s.name)+(fin?" · "+fin.score+"%":" · not started")+'"><span class="dotg" style="background:'+(fin?"var(--green)":"var(--muted)")+'"></span>'+esc(s.name.split(" ")[0])+(fin?" "+fin.score+"%":"")+'</span>';
+      }).join("")+'</div>'):'')+
+    '</div>';
+  }).join("")+'</div>';
+}
+async function delAsg(id){ if(!confirm("Delete this assignment? Results are kept."))return; await FSHData.deleteAssignment(id); await refreshAll(); renderAssignList(); toast("Assignment removed"); }
+window.delAsg=delAsg;
+
+var ASN = null;
+async function openAssign(mockId){
+  if (!STATE.mocks.length){ toast("Build a mock first"); nav("mocks"); return; }
+  if (!STATE.classes.length){ toast("Create a class first"); nav("classes"); return; }
+  ASN = { mockId: mockId||STATE.mocks[0]._id, classId: STATE.activeClass||STATE.classes[0]._id, mode:"class", picked:{} };
+  await renderAssignModal();
+}
+async function renderAssignModal(){
+  var roster = await FSHData.classRoster(ASN.classId);
+  var mockOpts = STATE.mocks.map(function(mk){return '<option value="'+mk._id+'"'+(mk._id===ASN.mockId?" selected":"")+'>'+esc(mk.title)+' ('+(mk.questionCount||0)+'q)</option>';}).join("");
+  var classOpts = STATE.classes.map(function(c){return '<option value="'+c._id+'"'+(c._id===ASN.classId?" selected":"")+'>'+esc(c.name)+'</option>';}).join("");
+  var rosterHtml = roster.length ? roster.map(function(r){
+    return '<label class="checkrow'+(ASN.picked[r.emailKey]?" on":"")+'"><input type="checkbox" '+(ASN.picked[r.emailKey]?"checked":"")+' onchange="togglePick(\''+r.emailKey+'\')"><div class="avatar" style="width:26px;height:26px;font-size:10px;background:'+avColor(r.email)+'">'+esc(initials(r.name))+'</div><div><div class="sname" style="font-size:13px;">'+esc(r.name)+'</div><div class="semail">'+esc(r.email)+'</div></div></label>';
+  }).join("") : '<div class="muted" style="padding:10px;font-size:13px;">No students in this class yet. Share the join code from the Classes tab.</div>';
+  el("modalRoot").innerHTML =
+  '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+
+    '<div class="modal-head"><h3>Assign a mock</h3><button class="x" onclick="closeModal()">×</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="field"><label class="lab">Mock</label><select class="sel" id="aMock" onchange="ASN.mockId=this.value">'+mockOpts+'</select></div>'+
+      '<div class="field"><label class="lab">Class</label><select class="sel" id="aClass" onchange="changeAsgClass(this.value)">'+classOpts+'</select></div>'+
+      '<div class="field"><label class="lab">Who gets it?</label><div class="seg" style="display:flex;">'+
+        '<button class="'+(ASN.mode==="class"?"on":"")+'" style="flex:1;" onclick="setAsgMode(\'class\')">Whole class</button>'+
+        '<button class="'+(ASN.mode==="students"?"on":"")+'" style="flex:1;" onclick="setAsgMode(\'students\')">Specific students</button></div></div>'+
+      (ASN.mode==="students"?'<div class="field"><label class="lab">Select students ('+Object.keys(ASN.picked).filter(function(k){return ASN.picked[k];}).length+')</label><div style="max-height:230px;overflow-y:auto;">'+rosterHtml+'</div></div>':'<div class="muted" style="font-size:13px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;">All '+roster.length+' students in this class will receive it immediately.</div>')+
+    '</div>'+
+    '<div class="modal-foot"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="doAssign()">📤 Assign now</button></div>'+
+  '</div></div>';
+}
+function setAsgMode(m){ ASN.mode=m; renderAssignModal(); }
+async function changeAsgClass(id){ ASN.classId=id; ASN.picked={}; renderAssignModal(); }
+function togglePick(k){ ASN.picked[k]=!ASN.picked[k]; var ks=Object.keys(ASN.picked).filter(function(x){return ASN.picked[x];}); /* light update */ renderAssignModal(); }
+async function doAssign(){
+  var mock = STATE.mocks.find(function(m){return m._id===ASN.mockId;});
+  var picked = Object.keys(ASN.picked).filter(function(k){return ASN.picked[k];});
+  if (ASN.mode==="students" && !picked.length){ toast("Pick at least one student"); return; }
+  await FSHData.assignMock({ mockId:ASN.mockId, mockTitle:mock?mock.title:"", classId:ASN.classId,
+    type:ASN.mode, emailKeys:picked });
+  closeModal(); await refreshAll(); nav("assign"); toast("Mock assigned ✓");
+}
+window.openAssign=openAssign;window.setAsgMode=setAsgMode;window.changeAsgClass=changeAsgClass;window.togglePick=togglePick;window.doAssign=doAssign;
+
+/* ============ CLASSES ============ */
+async function viewClasses(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Classes</div><div class="psub">Create a class, share the join code, manage your roster.</div></div>'+
+    '<button class="btn primary" onclick="createClassPrompt()">＋ New class</button></div>'+
+    (STATE.classes.length?classPicker():"")+'<div id="clsBody"></div>';
+  if (!STATE.classes.length){ el("clsBody").innerHTML = emptyBox("👥","No classes yet","Create a class and students can join with the code you share."); return; }
+  var c = activeClassObj();
+  var data = await loadClassData(c._id);
+  el("clsBody").innerHTML =
+    '<div class="grid" style="grid-template-columns:300px 1fr;gap:16px;align-items:start;">'+
+      '<div class="card"><div class="lab">Join code</div><div class="code-box" style="margin:6px 0 12px;">'+esc(c.code)+'</div>'+
+        '<div class="muted" style="font-size:12px;margin-bottom:14px;">Students enter this code at sign-up to join <b>'+esc(c.name)+'</b>.</div>'+
+        '<div style="display:flex;gap:8px;"><button class="btn sm" style="flex:1;justify-content:center;" onclick="copyCode(\''+esc(c.code)+'\')">📋 Copy</button>'+
+        '<button class="btn sm" onclick="regenCode(\''+c._id+'\')">↻ New code</button></div>'+
+        '<div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px;display:flex;gap:8px;"><button class="btn sm" style="flex:1;justify-content:center;" onclick="renameClassPrompt(\''+c._id+'\')">Rename</button></div>'+
+        '<div class="stats" style="grid-template-columns:1fr 1fr;margin-top:14px;margin-bottom:0;"><div class="stat"><div class="v">'+data.students.length+'</div><div class="l">Students</div></div>'+
+        '<div class="stat gr"><div class="v">'+classAvgOf(data.students)+'%</div><div class="l">Avg score</div></div></div></div>'+
+      '<div><div class="tbl-wrap"><table><thead><tr><th>Student</th><th>Tests</th><th>Avg</th><th>Latest</th><th>Resources opened</th><th></th></tr></thead><tbody>'+
+        (data.students.length?data.students.map(function(s){
+          var opened = Object.keys(s.engagement).length;
+          return '<tr><td><div class="scell"><div class="avatar" style="background:'+avColor(s.email)+'">'+esc(initials(s.name))+'</div><div><div class="sname">'+esc(s.name)+'</div><div class="semail">'+esc(s.email)+'</div></div></div></td>'+
+            '<td style="font-family:var(--mono);">'+s.count+'</td>'+
+            '<td>'+(s.avg!=null?'<span style="font-family:var(--mono);color:'+scoreCol(s.avg)+'">'+s.avg+'%</span>':'<span class="muted">—</span>')+'</td>'+
+            '<td>'+(s.latest!=null?'<span style="font-family:var(--mono);color:'+scoreCol(s.latest)+'">'+s.latest+'%</span>':'<span class="muted">—</span>')+'</td>'+
+            '<td><span class="muted" style="font-family:var(--mono);">'+opened+'/'+STATE.resources.length+'</span></td>'+
+            '<td style="text-align:right;"><button class="btn sm" onclick="openStudent(\''+s.emailKey+'\')">View</button> <button class="btn sm danger" onclick="kick(\''+c._id+'\',\''+s.emailKey+'\')">Remove</button></td></tr>';
+        }).join(""):'<tr><td colspan="6"><div class="empty"><div class="ei">🪑</div><div class="et">No students yet</div><div class="muted">Share the join code to fill your roster.</div></div></td></tr>')+
+      '</tbody></table></div></div></div>';
+}
+function classAvgOf(students){ var a=students.filter(function(s){return s.avg!=null;}); return a.length?Math.round(a.reduce(function(x,s){return x+s.avg;},0)/a.length):0; }
+async function createClassPrompt(){ var n=prompt("Class name (e.g. GRE Quant — Fall 2026):"); if(!n)return; var c=await FSHData.createClass(n); STATE.activeClass=c._id; await refreshAll(); viewClasses(); toast("Class created · code "+c.code); }
+async function renameClassPrompt(id){ var c=STATE.classes.find(function(x){return x._id===id;}); var n=prompt("Rename class:",c.name); if(!n)return; await FSHData.renameClass(id,n); await refreshAll(); viewClasses(); toast("Renamed"); }
+async function regenCode(id){ if(!confirm("Generate a new join code? The old one stops working."))return; await FSHData.regenCode(id); await refreshAll(); viewClasses(); toast("New code generated"); }
+function copyCode(c){ navigator.clipboard&&navigator.clipboard.writeText(c); toast("Code copied"); }
+async function kick(cid,ek){ if(!confirm("Remove this student from the class?"))return; await FSHData.removeFromClass(cid,ek); viewClasses(); toast("Student removed"); }
+window.createClassPrompt=createClassPrompt;window.renameClassPrompt=renameClassPrompt;window.regenCode=regenCode;window.copyCode=copyCode;window.kick=kick;
+
+/* ============ RESOURCES ============ */
+async function viewResources(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Study resources</div><div class="psub">Share materials — and see who is actually opening them.</div></div>'+
+    '<button class="btn primary" onclick="openResource()">＋ Add resource</button></div>'+
+    (STATE.classes.length?classPicker():"")+'<div id="resBody"></div>';
+  if (!STATE.resources.length){ el("resBody").innerHTML = emptyBox("📚","No resources shared","Add a link to a video, PDF or article. Each one is engagement-tracked."); return; }
+  var data = await loadClassData(STATE.activeClass);
+  var students = data.students;
+  // engagement matrix
+  el("resBody").innerHTML =
+    '<div class="grid" style="gap:14px;">'+STATE.resources.map(function(r){
+      var openers = students.filter(function(s){ return s.engagement[r._id]; });
+      var completed = openers.filter(function(s){ return s.engagement[r._id].completed; });
+      var pct = students.length ? Math.round(openers.length/students.length*100) : 0;
+      var ignored = students.filter(function(s){ return !s.engagement[r._id]; });
+      return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">'+
+        '<div style="min-width:0;"><div style="display:flex;align-items:center;gap:8px;"><span class="pill blue">'+esc(r.type||"link")+'</span><a href="'+esc(r.url)+'" target="_blank" style="font-weight:700;color:#fff;font-size:15px;">'+esc(r.title)+' ↗</a></div>'+
+        (r.note?'<div class="muted" style="font-size:12.5px;margin-top:5px;">'+esc(r.note)+'</div>':'')+'</div>'+
+        '<button class="btn sm danger" onclick="delRes(\''+r._id+'\')">🗑</button></div>'+
+        '<div style="display:flex;align-items:center;gap:12px;margin:14px 0 4px;"><div class="bar" style="flex:1;height:8px;"><div style="width:'+pct+'%;background:'+scoreCol(pct)+'"></div></div>'+
+        '<span style="font-family:var(--mono);font-size:13px;font-weight:600;">'+openers.length+'/'+students.length+' opened</span>'+
+        (completed.length?'<span class="pill green">'+completed.length+' completed</span>':'')+'</div>'+
+        (students.length?('<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">'+
+          openers.map(function(s){return '<span class="pill green" title="opened '+s.engagement[r._id].opens+'×"><span class="dotg" style="background:var(--green)"></span>'+esc(s.name.split(" ")[0])+'</span>';}).join("")+
+          ignored.map(function(s){return '<span class="pill rose" title="not opened"><span class="dotg" style="background:var(--rose)"></span>'+esc(s.name.split(" ")[0])+'</span>';}).join("")+
+        '</div>'):'')+
+      '</div>';
+    }).join("")+'</div>';
+}
+var RES=null;
+function openResource(){ RES={title:"",url:"",type:"video",note:""}; el("modalRoot").innerHTML=
+  '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+
+    '<div class="modal-head"><h3>Add study resource</h3><button class="x" onclick="closeModal()">×</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="field"><label class="lab">Title</label><input class="inp" id="rTitle" placeholder="e.g. Magoosh — Powers & Roots"></div>'+
+      '<div class="row"><div class="field" style="flex:2;"><label class="lab">Link (URL)</label><input class="inp" id="rUrl" placeholder="https://…"></div>'+
+        '<div class="field"><label class="lab">Type</label><select class="sel" id="rType">'+['video','article','pdf','practice','link'].map(function(t){return '<option value="'+t+'">'+t+'</option>';}).join("")+'</select></div></div>'+
+      '<div class="field"><label class="lab">Note <span class="muted" style="text-transform:none;font-weight:400;">(why it matters)</span></label><input class="inp" id="rNote" placeholder="Watch before Thursday\'s mock"></div>'+
+      (STATE.classes.length?'<div class="field"><label class="lab">Class</label><select class="sel" id="rClass"><option value="">All classes</option>'+STATE.classes.map(function(c){return '<option value="'+c._id+'"'+(c._id===STATE.activeClass?" selected":"")+'>'+esc(c.name)+'</option>';}).join("")+'</select></div>':'')+
+    '</div>'+
+    '<div class="modal-foot"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveResource()">Share resource</button></div>'+
+  '</div></div>'; }
+async function saveResource(){
+  var title=el("rTitle").value.trim(), url=el("rUrl").value.trim();
+  if(!title||!url){toast("Title and link are required");return;}
+  await FSHData.addResource({ title:title, url:url, type:el("rType").value, note:el("rNote").value.trim(), classId:(el("rClass")||{}).value||null });
+  closeModal(); await refreshAll(); viewResources(); toast("Resource shared ✓");
+}
+async function delRes(id){ if(!confirm("Remove this resource?"))return; await FSHData.deleteResource(id); await refreshAll(); viewResources(); toast("Removed"); }
+window.openResource=openResource;window.saveResource=saveResource;window.delRes=delRes;
+
+/* ============ FOLLOW-UP ============ */
+function computeFollowup(students, eng){
+  var out=[];
+  students.forEach(function(s){
+    var reasons=[];
+    if (s.count===0) reasons.push("Hasn't taken any mock");
+    else if (s.avg!=null && s.avg<40) reasons.push("Avg "+s.avg+"% — at risk");
+    else if (s.trend==="down") reasons.push("Scores declining");
+    var openedCount = Object.keys(s.engagement||{}).length;
+    if (STATE.resources.length>=2 && openedCount===0) reasons.push("Ignoring shared resources");
+    if (reasons.length) out.push({ name:s.name, email:s.email, emailKey:s.emailKey, reason:reasons.join(" · "),
+      severity:(s.count===0||(s.avg!=null&&s.avg<40))?2:1 });
+  });
+  return out.sort(function(a,b){return b.severity-a.severity;});
+}
+async function viewFollowup(){
+  var m = el("main");
+  m.innerHTML = '<div class="phead"><div><div class="ptitle">Follow-up</div><div class="psub">Students slipping on scores or ignoring study resources — reach out before it compounds.</div></div></div>'+
+    (STATE.classes.length?classPicker():"")+'<div id="fuBody"></div>';
+  if (!STATE.classes.length){ el("fuBody").innerHTML=emptyBox("👥","No classes yet","Create a class to start tracking commitment."); return; }
+  var data = await loadClassData(STATE.activeClass);
+  var flagged = computeFollowup(data.students, data.eng);
+  el("bFollow").textContent = flagged.length;
+  if (!flagged.length){ el("fuBody").innerHTML = emptyBox("✅","All clear","Every student is engaging and on track. Nice work."); return; }
+  el("fuBody").innerHTML = '<div class="tbl-wrap"><table><thead><tr><th>Student</th><th>Why flagged</th><th>Avg</th><th>Resources</th><th></th></tr></thead><tbody>'+
+    flagged.map(function(f){
+      var s = data.students.find(function(x){return x.emailKey===f.emailKey;});
+      var opened = Object.keys(s.engagement||{}).length;
+      return '<tr><td><div class="scell"><div class="avatar" style="background:'+avColor(f.email)+'">'+esc(initials(f.name))+'</div><div><div class="sname">'+esc(f.name)+'</div><div class="semail">'+esc(f.email)+'</div></div></div></td>'+
+        '<td><span class="pill '+(f.severity===2?"rose":"gold")+'">'+esc(f.reason)+'</span></td>'+
+        '<td>'+(s.avg!=null?'<span style="font-family:var(--mono);color:'+scoreCol(s.avg)+'">'+s.avg+'%</span>':'<span class="muted">No data</span>')+'</td>'+
+        '<td><span class="muted" style="font-family:var(--mono);">'+opened+'/'+STATE.resources.length+'</span></td>'+
+        '<td style="text-align:right;white-space:nowrap;"><a class="btn sm" href="mailto:'+esc(f.email)+'?subject=FreeStudy%20Hub%20check-in">✉ Email</a> <button class="btn sm" onclick="openStudent(\''+f.emailKey+'\')">View</button></td></tr>';
+    }).join("")+'</tbody></table></div>';
+}
+
+/* ============ STUDENT DRAWER ============ */
+async function openStudent(ek){
+  var roster=[]; for(var i=0;i<STATE.classes.length;i++){ roster=roster.concat(await FSHData.classRoster(STATE.classes[i]._id)); }
+  var r = roster.find(function(x){return x.emailKey===ek;});
+  if(!r){toast("Student not found");return;}
+  var results = await FSHData.resultsForStudent(r.email);
+  var eng = await FSHData.engagementFor(r.email);
+  var scores = results.map(function(x){return x.score;});
+  var avg = scores.length?Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length):null;
+  var best = scores.length?Math.max.apply(null,scores):null;
+  // tag mastery aggregate
+  var tags={}; results.forEach(function(res){ if(res.tagResults) Object.entries(res.tagResults).forEach(function(t){ if(!tags[t[0]])tags[t[0]]={correct:0,total:0}; tags[t[0]].correct+=t[1].correct; tags[t[0]].total+=t[1].total; }); });
+  el("modalRoot").innerHTML =
+  '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+
+    '<div class="modal-head"><h3>'+esc(r.name)+'</h3><button class="x" onclick="closeModal()">×</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="muted" style="font-size:12.5px;margin-top:-8px;margin-bottom:14px;">'+esc(r.email)+'</div>'+
+      '<div class="stats" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px;">'+
+        '<div class="stat"><div class="v">'+results.length+'</div><div class="l">Mocks taken</div></div>'+
+        '<div class="stat gr"><div class="v">'+(avg!=null?avg+"%":"—")+'</div><div class="l">Average</div></div>'+
+        '<div class="stat b"><div class="v">'+(best!=null?best+"%":"—")+'</div><div class="l">Best</div></div></div>'+
+      '<div class="lab">Recent mocks</div>'+
+      (results.length?('<div class="tbl-wrap" style="margin-bottom:16px;"><table><tbody>'+results.slice(0,6).map(function(res){
+        var mk = STATE.mocks.find(function(m){return m._id===res.testId;});
+        return '<tr><td><div style="font-weight:600;color:#fff;">'+esc(mk?mk.title:res.testId)+'</div><div class="semail">'+fmtDate(res.timestamp)+'</div></td><td style="text-align:right;"><span style="font-family:var(--mono);font-weight:700;color:'+scoreCol(res.score)+'">'+res.score+'%</span></td></tr>';
+      }).join("")+'</tbody></table></div>'):'<div class="muted" style="font-size:13px;margin-bottom:16px;">No mocks completed yet.</div>')+
+      (Object.keys(tags).length?('<div class="lab">Topic mastery</div><div style="margin-bottom:16px;">'+Object.entries(tags).map(function(t){ var p=Math.round(t[1].correct/t[1].total*100); return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:12.5px;width:110px;">'+esc(t[0])+'</div><div class="bar" style="flex:1;"><div style="width:'+p+'%;background:'+scoreCol(p)+'"></div></div><div style="font-family:var(--mono);font-size:12px;width:42px;text-align:right;color:'+scoreCol(p)+'">'+p+'%</div></div>'; }).join("")+'</div>'):'')+
+      '<div class="lab">Resource engagement</div>'+
+      (STATE.resources.length?('<div>'+STATE.resources.map(function(res){ var e=eng[res._id]; return '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);"><span class="dotg" style="background:'+(e?(e.completed?"var(--green)":"var(--gold)"):"var(--rose)")+'"></span><div style="flex:1;font-size:13px;">'+esc(res.title)+'</div><span class="muted" style="font-size:11.5px;font-family:var(--mono);">'+(e?(e.completed?"completed":"opened "+e.opens+"×"):"not opened")+'</span></div>'; }).join("")+'</div>'):'<div class="muted" style="font-size:13px;">No resources shared yet.</div>')+
+    '</div>'+
+    '<div class="modal-foot"><a class="btn" href="mailto:'+esc(r.email)+'">✉ Email student</a><button class="btn primary" onclick="closeModal()">Close</button></div>'+
+  '</div></div>';
+}
+window.openStudent=openStudent;
+</script>
+</body>
+</html>

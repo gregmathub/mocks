@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeStudy Hub · Instructor Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --navy:    #0B1F3A;
+  --navy2:   #132840;
+  --navy3:   #1A3558;
+  --teal:    #0D9488;
+  --teal2:   #2DD4BF;
+  --blue:    #1D4ED8;
+  --gold:    #F59E0B;
+  --rose:    #F43F5E;
+  --green:   #10B981;
+  --purple:  #8B5CF6;
+  --bg:      #07131F;
+  --surface: #0F2336;
+  --card:    #142B42;
+  --border:  #1E3A52;
+  --text:    #E2EAF4;
+  --muted:   #6B8BAA;
+  --mono:    'DM Mono', monospace;
+  --sans:    'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ── TOP NAV ── */
+.topnav {
+  background: var(--navy);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--teal), var(--blue));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.brand-text { font-weight: 800; font-size: 15px; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+.brand-sub  { font-size: 9px; letter-spacing: 2px; color: var(--teal2); text-transform: uppercase; font-weight: 400; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-pill {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+  padding: 5px 14px; border-radius: 20px; cursor: pointer;
+  border: 1.5px solid var(--border); background: transparent; color: var(--muted);
+  font-family: var(--sans); transition: all 0.15s;
+}
+.nav-pill.active, .nav-pill:hover { border-color: var(--teal2); color: var(--teal2); background: rgba(45,212,191,0.08); }
+.nav-pill.active { background: rgba(45,212,191,0.12); }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: calc(100vh - 56px); }
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+.sidebar-section { padding: 0 16px; margin-bottom: 24px; }
+.sidebar-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 8px;
+  padding: 0 4px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  transition: all 0.15s; margin-bottom: 2px;
+}
+.sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+.sidebar-item.active { background: rgba(45,212,191,0.12); color: var(--teal2); }
+.sidebar-item .icon { font-size: 15px; width: 18px; text-align: center; }
+.sidebar-badge {
+  margin-left: auto; background: var(--teal); color: #fff;
+  font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 10px;
+}
+
+.content { flex: 1; padding: 28px 28px 60px; overflow: hidden; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+.page-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+/* ── STAT CARDS ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.stat-card.teal::before  { background: var(--teal2); }
+.stat-card.blue::before  { background: var(--blue); }
+.stat-card.gold::before  { background: var(--gold); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.rose::before  { background: var(--rose); }
+.stat-card.purple::before{ background: var(--purple); }
+.stat-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1; }
+.stat-delta { font-size: 11px; color: var(--green); margin-top: 5px; font-weight: 500; }
+.stat-delta.neg { color: var(--rose); }
+.stat-icon { position: absolute; right: 16px; top: 16px; font-size: 22px; opacity: 0.25; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 24px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.2px; }
+.section-action {
+  font-size: 11.5px; color: var(--teal2); cursor: pointer;
+  background: none; border: none; font-family: var(--sans); font-weight: 600;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  background: var(--surface);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(30,58,82,0.6);
+  color: var(--text);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── STUDENT CELLS ── */
+.student-name { font-weight: 600; color: #fff; font-size: 13px; }
+.student-email { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px; color: #fff;
+  flex-shrink: 0;
+}
+.student-cell { display: flex; align-items: center; gap: 10px; }
+
+/* ── SCORE BADGE ── */
+.score-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; padding: 3px 10px; border-radius: 6px;
+  font-size: 12.5px; font-weight: 700; font-family: var(--mono);
+}
+.score-a { background: rgba(16,185,129,0.15); color: #34D399; }
+.score-b { background: rgba(45,212,191,0.15); color: var(--teal2); }
+.score-c { background: rgba(245,158,11,0.15); color: #FCD34D; }
+.score-d { background: rgba(244,63,94,0.15); color: #FB7185; }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.07);
+  overflow: hidden; min-width: 80px;
+}
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.fill-green  { background: var(--green); }
+.fill-teal   { background: var(--teal2); }
+.fill-gold   { background: var(--gold); }
+.fill-rose   { background: var(--rose); }
+
+/* ── TOPIC MASTERY ── */
+.topic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.topic-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.topic-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.topic-stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.topic-pct { font-size: 14px; font-weight: 800; font-family: var(--mono); }
+.topic-count { font-size: 10px; color: var(--muted); }
+
+/* ── LEADERBOARD ── */
+.lb-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid rgba(30,58,82,0.5);
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-rank {
+  font-size: 13px; font-weight: 800; font-family: var(--mono);
+  width: 24px; text-align: center; flex-shrink: 0;
+}
+.lb-rank.gold   { color: #F59E0B; }
+.lb-rank.silver { color: #94A3B8; }
+.lb-rank.bronze { color: #B45309; }
+.lb-name { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
+.lb-score { font-size: 13px; font-weight: 700; font-family: var(--mono); color: var(--teal2); }
+.lb-delta { font-size: 10px; color: var(--green); margin-left: 4px; }
+.lb-bar { width: 80px; }
+.trophy { font-size: 16px; }
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.three-col { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+/* ── MINI CHART ── */
+.sparkline-wrap { padding: 12px 16px; }
+.sparkline-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+
+/* ── SEARCH + FILTER ── */
+.toolbar {
+  display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;
+}
+.search-box {
+  flex: 1; min-width: 180px; max-width: 300px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px;
+  font-size: 13px; color: var(--text); font-family: var(--sans);
+  outline: none;
+}
+.search-box:focus { border-color: var(--teal2); }
+.search-box::placeholder { color: var(--muted); }
+.filter-btn {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 14px;
+  font-size: 12px; color: var(--muted); cursor: pointer;
+  font-family: var(--sans); font-weight: 500;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active { border-color: var(--teal2); color: var(--teal2); }
+.export-btn {
+  background: rgba(13,148,136,0.12); border: 1px solid var(--teal);
+  border-radius: 8px; padding: 8px 16px;
+  font-size: 12px; color: var(--teal2); cursor: pointer;
+  font-family: var(--sans); font-weight: 600;
+  transition: all 0.15s; margin-left: auto;
+}
+.export-btn:hover { background: rgba(13,148,136,0.22); }
+
+/* ── EMPTY STATE ── */
+.empty {
+  text-align: center; padding: 48px 20px;
+  color: var(--muted); font-size: 13px;
+}
+.empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+.empty-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+/* ── ALERT BANNER ── */
+.alert {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  color: #FCD34D;
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* ── DETAIL DRAWER ── */
+.drawer-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); z-index: 200;
+}
+.drawer-overlay.open { display: block; }
+.drawer {
+  position: fixed; top: 0; right: -480px; bottom: 0;
+  width: 460px; background: var(--surface);
+  border-left: 1px solid var(--border);
+  z-index: 201; overflow-y: auto;
+  transition: right 0.3s ease;
+  padding: 24px;
+}
+.drawer.open { right: 0; }
+.drawer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.drawer-title { font-size: 16px; font-weight: 800; color: #fff; }
+.drawer-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+.drawer-section { margin-bottom: 20px; }
+.drawer-section-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+
+/* ── ATTEMPT LOG ── */
+.attempt-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 8px;
+  margin-bottom: 8px;
+}
+.attempt-num { font-size: 11px; color: var(--muted); font-family: var(--mono); width: 20px; }
+.attempt-test { font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
+.attempt-score { font-size: 13px; font-weight: 800; font-family: var(--mono); }
+.attempt-time { font-size: 10.5px; color: var(--muted); }
+
+/* ── TAG ── */
+.tag {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px;
+}
+.tag-premium { background: rgba(139,92,246,0.2); color: #A78BFA; }
+.tag-free    { background: rgba(16,185,129,0.15); color: #34D399; }
+.tag-at-risk { background: rgba(244,63,94,0.15); color: #FB7185; }
+
+/* ── PAGE TABS ── */
+.page-tabs {
+  display: flex; gap: 2px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 3px; margin-bottom: 22px; width: fit-content;
+}
+.page-tab {
+  padding: 7px 18px; border-radius: 7px; font-size: 12.5px;
+  font-weight: 600; cursor: pointer; color: var(--muted);
+  transition: all 0.15s; border: none; background: none;
+  font-family: var(--sans);
+}
+.page-tab.active { background: var(--card); color: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+
+/* ── TREND ARROW ── */
+.trend-up   { color: var(--green); font-size: 11px; }
+.trend-down { color: var(--rose); font-size: 11px; }
+.trend-flat { color: var(--muted); font-size: 11px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .content { padding: 16px; }
+  .two-col, .three-col, .topic-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="brand">
+    <div class="brand-icon">📚</div>
+    <div>
+      <div class="brand-text">FreeStudy Hub</div>
+      <div class="brand-sub">Instructor Dashboard</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a class="nav-pill" href="teacher.html" style="text-decoration:none;">← Console</a>
+    <span style="font-size:11px;color:var(--muted);">Leonard Nwosu</span>
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--teal),var(--blue));border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;">L</div>
+  </div>
+</header>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Main</div>
+    <div class="sidebar-item active" onclick="showPage('overview')"><span class="icon">📊</span> Overview</div>
+    <div class="sidebar-item" onclick="showPage('students')"><span class="icon">👥</span> Students <span class="sidebar-badge" id="studentBadge">0</span></div>
+    <div class="sidebar-item" onclick="showPage('leaderboard')"><span class="icon">🏆</span> Leaderboard</div>
+    <div class="sidebar-item" onclick="showPage('topics')"><span class="icon">📐</span> Topic Mastery</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Tests</div>
+    <div class="sidebar-item" onclick="showPage('test1')"><span class="icon">📝</span> Section 1 · Easy</div>
+    <div class="sidebar-item" onclick="showPage('test2')"><span class="icon">📝</span> Section 2 · Medium</div>
+    <div class="sidebar-item" onclick="showPage('testset1')"><span class="icon">🎓</span> ETS Official · Set 1</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Tools</div>
+    <div class="sidebar-item" onclick="exportCSV()"><span class="icon">📥</span> Export CSV</div>
+    <div class="sidebar-item" onclick="clearData()"><span class="icon">🗑</span> Clear Data</div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="content" id="mainContent">
+
+  <!-- ══ OVERVIEW PAGE ══ -->
+  <div id="page-overview">
+    <div class="page-header">
+      <div class="page-title">Overview</div>
+      <div class="page-sub">All students · all tests · real-time</div>
+    </div>
+
+    <div id="noDataAlert" class="alert" style="display:none;">
+      ⚠️ No student data yet. Share your mock test links and results will appear here automatically.
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stats-grid">
+      <div class="stat-card teal">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value" id="statStudents">—</div>
+        <div class="stat-delta" id="statStudentsDelta"></div>
+        <div class="stat-icon">👥</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">Tests Taken</div>
+        <div class="stat-value" id="statAttempts">—</div>
+        <div class="stat-delta" id="statAttemptsDelta"></div>
+        <div class="stat-icon">📝</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-label">Avg Score</div>
+        <div class="stat-value" id="statAvgScore">—</div>
+        <div class="stat-delta" id="statScoreDelta"></div>
+        <div class="stat-icon">⭐</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Pass Rate (≥60%)</div>
+        <div class="stat-value" id="statPassRate">—</div>
+        <div class="stat-delta"></div>
+        <div class="stat-icon">✅</div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-label">At Risk (&lt;40%)</div>
+        <div class="stat-value" id="statAtRisk">—</div>
+        <div class="stat-delta neg"></div>
+        <div class="stat-icon">⚠️</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">Avg Time / Test</div>
+        <div class="stat-value" id="statAvgTime">—</div>
+        <div class="stat-icon">⏱</div>
+      </div>
+    </div>
+
+    <!-- Recent activity + Leaderboard mini -->
+    <div class="three-col">
+      <!-- Recent attempts -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Recent Submissions</div>
+          <button class="section-action" onclick="showPage('students')">View all →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="recentTable">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Test</th>
+                <th>Score</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="recentBody">
+              <tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-title">No submissions yet</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Mini leaderboard -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Top 5 Students</div>
+          <button class="section-action" onclick="showPage('leaderboard')">Full →</button>
+        </div>
+        <div class="table-wrap" id="miniLeaderboard">
+          <div class="empty" style="padding:32px 20px;">
+            <div class="empty-icon">🏆</div>
+            <div class="empty-title">No data yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topic mastery overview -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Class Topic Mastery</div>
+        <button class="section-action" onclick="showPage('topics')">Details →</button>
+      </div>
+      <div class="topic-grid" id="topicOverview">
+        <div class="topic-card" style="grid-column:1/-1;"><div class="empty" style="padding:20px;"><div class="empty-icon">📐</div><div class="empty-title">Topic data will appear after students complete tests</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STUDENTS PAGE ══ -->
+  <div id="page-students" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">Students</div>
+      <div class="page-sub">Individual performance records</div>
+    </div>
+    <div class="toolbar">
+      <input class="search-box" id="studentSearch" placeholder="🔍  Search by name or email…" oninput="renderStudentTable()">
+      <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('pass',this)">Passing ≥60%</button>
+      <button class="filter-btn" onclick="setFilter('risk',this)">At Risk &lt;40%</button>
+      <button class="filter-btn" onclick="setFilter('premium',this)">Premium</button>
+      <button class="export-btn" onclick="exportCSV()">📥 Export CSV</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Tests</th>
+            <th>Best Score</th>
+            <th>Latest Score</th>
+            <th>Avg Score</th>
+            <th>Trend</th>
+            <th>Total Time</th>
+            <th>Tier</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="studentBody">
+          <tr><td colspan="9"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">No students yet</div><div>Share your test links to get started</div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ LEADERBOARD PAGE ══ -->
+  <div id="page-leaderboard" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">🏆 Leaderboard</div>
+      <div class="page-sub">Ranked by best score · updated in real-time</div>
+    </div>
+    <div class="page-tabs">
+      <button class="page-tab active" onclick="setLbFilter('best',this)">Best Score</button>
+      <button class="page-tab" onclick="setLbFilter('avg',this)">Average Score</button>
+      <button class="page-tab" onclick="setLbFilter('improvement',this)">Most Improved</button>
+    </div>
+    <div class="table-wrap" id="leaderboardFull">
+      <div class="empty" style="padding:48px;">
+        <div class="empty-icon">🏆</div>
+        <div class="empty-title">Leaderboard is empty</div>
+        <div>Results will rank automatically as students complete tests</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOPIC MASTERY PAGE ══ -->
+  <div id="page-topics" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">Topic Mastery</div>
+      <div class="page-sub">Class-wide performance by question type</div>
+    </div>
+    <div class="topic-grid" id="topicFull" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">
+      <div class="topic-card" style="grid-column:1/-1;"><div class="empty" style="padding:20px;"><div class="empty-icon">📐</div><div class="empty-title">No topic data yet</div></div></div>
+    </div>
+  </div>
+
+  <!-- ══ TEST DETAIL PAGES ══ -->
+  <div id="page-test1" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">Section 1 · Easy</div>
+      <div class="page-sub">20 questions · 35 minutes · Quantitative Reasoning</div>
+    </div>
+    <div id="test1Content"><div class="empty"><div class="empty-icon">📝</div><div class="empty-title">No attempts on Section 1 yet</div></div></div>
+  </div>
+  <div id="page-test2" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">Section 2 · Medium</div>
+      <div class="page-sub">20 questions · 35 minutes · Quant Challenger</div>
+    </div>
+    <div id="test2Content"><div class="empty"><div class="empty-icon">📝</div><div class="empty-title">No attempts on Section 2 yet</div></div></div>
+  </div>
+  <div id="page-testset1" style="display:none;">
+    <div class="page-header">
+      <div class="page-title">ETS Official · Set 1</div>
+      <div class="page-sub">15 questions · 26 minutes · Official ETS mixed practice</div>
+    </div>
+    <div id="testset1Content"><div class="empty"><div class="empty-icon">🎓</div><div class="empty-title">No attempts on ETS Set 1 yet</div></div></div>
+  </div>
+
+</main>
+</div>
+
+<!-- STUDENT DETAIL DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="studentDrawer">
+  <div class="drawer-header">
+    <div class="drawer-title" id="drawerTitle">Student Detail</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div id="drawerContent"></div>
+</div>
+
+<!-- FreeStudy Hub auth layer -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="fsh-auth.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let currentPage = 'overview';
+let studentFilter = 'all';
+let lbFilter = 'best';
+
+// Topic categories by question number (for both tests)
+const TOPIC_MAP = {
+  // Test 1 (Easy)
+  't1': {
+    'Quantitative Comparison': [1,2,3,4,5,6,7],
+    'Multiple Choice': [8,9,10,11,12,13,16,17,20],
+    'Data Interpretation': [10,11,12],
+    'Select All That Apply': [14,19],
+    'Numeric Entry': [15,18],
+  },
+  // Test 2 (Medium)
+  't2': {
+    'Quantitative Comparison': [1,2,3,4,5,6,7],
+    'Algebra & Equations': [2,6,7,8,13,17],
+    'Number Properties': [1,9,14,15,18],
+    'Geometry': [3,5,19],
+    'Statistics': [4,10,11,12],
+    'Word Problems': [6,13,16],
+    'Functions': [20],
+  },
+  // ETS Official Set 1 (15 questions)
+  'set1': {
+    'Quantitative Comparison': [1,2,3,4,5,6],
+    'Algebra': [1,3],
+    'Geometry': [2,5,6],
+    'Statistics': [4,15],
+    'Arithmetic': [7],
+    'Probability': [8],
+    'Rates': [9],
+    'Data Interpretation': [10,11,12,13],
+    'Number Properties': [14],
+  }
+};
+
+const AVATAR_COLORS = [
+  '#0D9488','#1D4ED8','#7C3AED','#BE185D','#B45309',
+  '#0891B2','#15803D','#C2410C','#6D28D9','#0F766E'
+];
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE — read all student results from shared storage
+// ═══════════════════════════════════════════════════════════
+
+// ================================================================
+// FIREBASE CONFIG — Replace FIREBASE_URL with your project URL
+// Get it from: Firebase Console → Realtime Database → Data tab
+// Example: https://freestudy-hub-12345-default-rtdb.firebaseio.com
+// ================================================================
+const FIREBASE_URL = "https://gregmat26-4ae92-default-rtdb.firebaseio.com";
+
+async function _authQ() {
+  try { var t = window.FSHAuth ? await FSHAuth.token() : null; return t ? "?auth=" + t : ""; }
+  catch(e){ return ""; }
+}
+const db = {
+  async save(path, data) {
+    try { const res = await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ(), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) }); return await res.json(); }
+    catch(e){ console.error("Firebase save error:", e); return null; }
+  },
+  async set(path, data) {
+    try { const res = await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ(), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) }); return await res.json(); }
+    catch(e){ console.error("Firebase set error:", e); return null; }
+  },
+  async get(path) {
+    try { const res = await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ()); return await res.json(); }
+    catch(e){ console.error("Firebase get error:", e); return null; }
+  },
+  async update(path, data) {
+    try { const res = await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ(), { method:"PATCH", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) }); return await res.json(); }
+    catch(e){ console.error("Firebase update error:", e); return null; }
+  },
+  async delete(path) {
+    try { await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ(), { method:"DELETE" }); }
+    catch(e){ console.error("Firebase delete error:", e); }
+  },
+  async getAll(path) {
+    try { const res = await fetch(FIREBASE_URL + "/" + path + ".json" + await _authQ()); return await res.json(); }
+    catch(e){ console.error("Firebase getAll error:", e); return null; }
+  }
+};
+
+async function loadAllData() {
+  const students = {};
+  try {
+    // Load all results from Firebase
+    const results = await db.get("results");
+    if (!results) return students;
+
+    for (const [emailKey, testData] of Object.entries(results)) {
+      for (const [testId, attempts] of Object.entries(testData)) {
+        for (const [timestamp, record] of Object.entries(attempts)) {
+          if (!record || !record.email) continue;
+          const email = record.email.toLowerCase().trim();
+          if (!students[email]) {
+            students[email] = {
+              name: record.name,
+              email: email,
+              tier: record.tier || "free",
+              attempts: []
+            };
+          }
+          students[email].attempts.push(record);
+        }
+      }
+    }
+    // Also load tier overrides from students node
+    const studentProfiles = await db.get("students");
+    if (studentProfiles) {
+      for (const [emailKey, profile] of Object.entries(studentProfiles)) {
+        const email = profile.email ? profile.email.toLowerCase().trim() : null;
+        if (email && students[email]) {
+          students[email].tier = profile.tier || "free";
+          students[email].name = profile.name || students[email].name;
+        }
+      }
+    }
+  } catch(e) { console.error("loadAllData error:", e); }
+  return students;
+}
+
+// ═══════════════════════════════════════════════════════════
+// COMPUTE STATS
+// ═══════════════════════════════════════════════════════════
+function computeStudentStats(attempts) {
+  if (!attempts.length) return null;
+  const scores = attempts.map(a => a.score);
+  const best = Math.max(...scores);
+  const latest = attempts.sort((a,b) => b.timestamp - a.timestamp)[0].score;
+  const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  const totalTime = attempts.reduce((a,b) => a + (b.timeUsed||0), 0);
+  // Trend: compare last 2
+  const sorted = [...attempts].sort((a,b) => a.timestamp - b.timestamp);
+  let trend = 'flat';
+  if (sorted.length >= 2) {
+    const diff = sorted[sorted.length-1].score - sorted[sorted.length-2].score;
+    trend = diff > 2 ? 'up' : diff < -2 ? 'down' : 'flat';
+  }
+  return { best, latest, avg, totalTime, trend, count: attempts.length };
+}
+
+function scoreBadgeClass(pct) {
+  if (pct >= 80) return 'score-a';
+  if (pct >= 60) return 'score-b';
+  if (pct >= 40) return 'score-c';
+  return 'score-d';
+}
+
+function progressColor(pct) {
+  if (pct >= 80) return 'fill-green';
+  if (pct >= 60) return 'fill-teal';
+  if (pct >= 40) return 'fill-gold';
+  return 'fill-rose';
+}
+
+function formatTime(secs) {
+  if (!secs) return '—';
+  const m = Math.floor(secs/60), s = secs%60;
+  return `${m}m ${s}s`;
+}
+
+function avatarColor(email) {
+  let hash = 0;
+  for (const c of email) hash = (hash * 31 + c.charCodeAt(0)) & 0xffffffff;
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+function initials(name) {
+  return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════
+async function renderAll() {
+  const students = await loadAllData();
+  const studentList = Object.values(students);
+  const allAttempts = studentList.flatMap(s => s.attempts);
+
+  document.getElementById('studentBadge').textContent = studentList.length;
+
+  if (!studentList.length) {
+    document.getElementById('noDataAlert').style.display = 'flex';
+  } else {
+    document.getElementById('noDataAlert').style.display = 'none';
+  }
+
+  renderStats(studentList, allAttempts);
+  renderRecent(allAttempts);
+  renderMiniLeaderboard(studentList);
+  renderTopicOverview(allAttempts);
+  renderStudentTable(students);
+  renderLeaderboard(studentList);
+  renderTopicFull(allAttempts);
+  renderTestPage('t1', studentList, 'test1Content');
+  renderTestPage('t2', studentList, 'test2Content');
+  renderTestPage('set1', studentList, 'testset1Content');
+}
+
+function renderStats(studentList, allAttempts) {
+  const scores = allAttempts.map(a=>a.score);
+  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+  const pass = scores.filter(s=>s>=60).length;
+  const risk = scores.filter(s=>s<40).length;
+  const totalTime = allAttempts.reduce((a,b)=>a+(b.timeUsed||0),0);
+  const avgTime = allAttempts.length ? Math.round(totalTime/allAttempts.length) : null;
+
+  document.getElementById('statStudents').textContent = studentList.length || '—';
+  document.getElementById('statAttempts').textContent = allAttempts.length || '—';
+  document.getElementById('statAvgScore').textContent = avg ? avg+'%' : '—';
+  document.getElementById('statPassRate').textContent = scores.length ? Math.round(pass/scores.length*100)+'%' : '—';
+  document.getElementById('statAtRisk').textContent = risk || '—';
+  document.getElementById('statAvgTime').textContent = avgTime ? formatTime(avgTime) : '—';
+}
+
+function renderRecent(allAttempts) {
+  const recent = [...allAttempts].sort((a,b)=>b.timestamp-a.timestamp).slice(0,8);
+  const tbody = document.getElementById('recentBody');
+  if (!recent.length) {
+    tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><div class="empty-icon">📭</div><div class="empty-title">No submissions yet</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = recent.map(a => {
+    const bc = scoreBadgeClass(a.score);
+    const testLabel = a.testId === 't1' ? 'Section 1' : a.testId === 't2' ? 'Section 2' : a.testId === 'set1' ? 'ETS Set 1' : a.testId;
+    const time = new Date(a.timestamp).toLocaleDateString('en-NG',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<tr>
+      <td>
+        <div class="student-cell">
+          <div class="avatar" style="background:${avatarColor(a.email)};width:26px;height:26px;font-size:10px;">${initials(a.name)}</div>
+          <div>
+            <div style="font-weight:600;font-size:12.5px;color:#fff;">${a.name}</div>
+            <div style="font-size:10px;color:var(--muted);">${time}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-size:12px;color:var(--muted);">${testLabel}</td>
+      <td><span class="score-badge ${bc}">${a.score}%</span></td>
+      <td style="font-size:11.5px;color:var(--muted);">${formatTime(a.timeUsed)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderMiniLeaderboard(studentList) {
+  const ranked = studentList
+    .map(s => ({ ...s, stats: computeStudentStats(s.attempts) }))
+    .filter(s => s.stats)
+    .sort((a,b) => b.stats.best - a.stats.best)
+    .slice(0,5);
+
+  const el = document.getElementById('miniLeaderboard');
+  if (!ranked.length) {
+    el.innerHTML = '<div class="empty" style="padding:32px 20px;"><div class="empty-icon">🏆</div><div class="empty-title">No data yet</div></div>';
+    return;
+  }
+  const medals = ['🥇','🥈','🥉','4.','5.'];
+  el.innerHTML = ranked.map((s,i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${medals[i]}</div>
+      <div class="avatar" style="background:${avatarColor(s.email)};width:28px;height:28px;font-size:11px;flex-shrink:0;">${initials(s.name)}</div>
+      <div class="lb-name">${s.name}</div>
+      <div class="lb-bar"><div class="progress-bar"><div class="progress-fill ${progressColor(s.stats.best)}" style="width:${s.stats.best}%"></div></div></div>
+      <div class="lb-score">${s.stats.best}%</div>
+    </div>
+  `).join('');
+}
+
+function renderTopicOverview(allAttempts) {
+  const el = document.getElementById('topicOverview');
+  if (!allAttempts.length) {
+    el.innerHTML = '<div class="topic-card" style="grid-column:1/-1;"><div class="empty" style="padding:20px;"><div class="empty-icon">📐</div><div class="empty-title">Topic data will appear after students complete tests</div></div></div>';
+    return;
+  }
+  const topics = computeTopicStats(allAttempts);
+  el.innerHTML = topics.slice(0,6).map(t => `
+    <div class="topic-card">
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-stats">
+        <div class="topic-pct" style="color:${t.pct>=70?'#34D399':t.pct>=50?'#2DD4BF':'#FB7185'}">${t.pct}%</div>
+        <div class="topic-count">${t.correct}/${t.total} correct</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${progressColor(t.pct)}" style="width:${t.pct}%"></div></div>
+    </div>
+  `).join('');
+}
+
+function computeTopicStats(allAttempts) {
+  // Aggregate per-question accuracy across all attempts
+  const qStats = {}; // qKey -> {correct, total}
+  for (const a of allAttempts) {
+    if (!a.questionResults) continue;
+    for (const [qNum, result] of Object.entries(a.questionResults)) {
+      const key = `${a.testId}-${qNum}`;
+      if (!qStats[key]) qStats[key] = {correct:0, total:0, testId:a.testId, qNum:parseInt(qNum)};
+      qStats[key].total++;
+      if (result) qStats[key].correct++;
+    }
+  }
+  // Map questions to topics
+  const topicAgg = {};
+  for (const [key, stat] of Object.entries(qStats)) {
+    const topicMap = TOPIC_MAP[stat.testId] || {};
+    for (const [topicName, qNums] of Object.entries(topicMap)) {
+      if (qNums.includes(stat.qNum)) {
+        if (!topicAgg[topicName]) topicAgg[topicName] = {correct:0, total:0};
+        topicAgg[topicName].correct += stat.correct;
+        topicAgg[topicName].total += stat.total;
+      }
+    }
+  }
+  return Object.entries(topicAgg)
+    .map(([name, d]) => ({ name, correct: d.correct, total: d.total, pct: d.total ? Math.round(d.correct/d.total*100) : 0 }))
+    .sort((a,b) => b.total - a.total);
+}
+
+let _studentFilter = 'all';
+function setFilter(f, btn) {
+  _studentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderStudentTable();
+}
+
+async function renderStudentTable(studentsObj) {
+  if (!studentsObj) {
+    const data = await loadAllData();
+    studentsObj = data;
+  }
+  let list = Object.values(studentsObj).map(s => ({...s, stats: computeStudentStats(s.attempts)})).filter(s=>s.stats);
+
+  const search = (document.getElementById('studentSearch')?.value||'').toLowerCase();
+  if (search) list = list.filter(s => s.name.toLowerCase().includes(search) || s.email.toLowerCase().includes(search));
+
+  if (_studentFilter === 'pass') list = list.filter(s => s.stats.avg >= 60);
+  if (_studentFilter === 'risk') list = list.filter(s => s.stats.avg < 40);
+  if (_studentFilter === 'premium') list = list.filter(s => s.tier === 'premium');
+
+  list.sort((a,b) => b.stats.best - a.stats.best);
+
+  const tbody = document.getElementById('studentBody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">No students match</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map((s,i) => {
+    const trendIcon = s.stats.trend === 'up' ? '<span class="trend-up">↑ Improving</span>' : s.stats.trend === 'down' ? '<span class="trend-down">↓ Declining</span>' : '<span class="trend-flat">→ Stable</span>';
+    const tierTag = s.tier === 'premium' ? '<span class="tag tag-premium">Premium</span>' : '<span class="tag tag-free">Free</span>';
+    const riskTag = s.stats.avg < 40 ? ' <span class="tag tag-at-risk">At Risk</span>' : '';
+    return `<tr>
+      <td>
+        <div class="student-cell">
+          <div class="avatar" style="background:${avatarColor(s.email)};">${initials(s.name)}</div>
+          <div>
+            <div class="student-name">${s.name}</div>
+            <div class="student-email">${s.email}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-family:var(--mono);font-size:13px;">${s.stats.count}</td>
+      <td><span class="score-badge ${scoreBadgeClass(s.stats.best)}">${s.stats.best}%</span></td>
+      <td><span class="score-badge ${scoreBadgeClass(s.stats.latest)}">${s.stats.latest}%</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="progress-bar" style="width:60px;"><div class="progress-fill ${progressColor(s.stats.avg)}" style="width:${s.stats.avg}%"></div></div>
+          <span style="font-family:var(--mono);font-size:12px;">${s.stats.avg}%</span>
+        </div>
+      </td>
+      <td>${trendIcon}</td>
+      <td style="font-size:12px;color:var(--muted);font-family:var(--mono);">${formatTime(s.stats.totalTime)}</td>
+      <td>${tierTag}${riskTag}</td>
+      <td><button style="background:rgba(45,212,191,0.1);border:1px solid var(--teal);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--teal2);cursor:pointer;font-family:var(--sans);font-weight:600;" onclick="openDrawer('${s.email}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+let _lbFilter = 'best';
+function setLbFilter(f, btn) {
+  _lbFilter = f;
+  document.querySelectorAll('.page-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeaderboard();
+}
+
+async function renderLeaderboard(studentList) {
+  if (!studentList) {
+    const data = await loadAllData();
+    studentList = Object.values(data);
+  }
+  let ranked = studentList
+    .map(s => ({ ...s, stats: computeStudentStats(s.attempts) }))
+    .filter(s => s.stats);
+
+  if (_lbFilter === 'best') ranked.sort((a,b) => b.stats.best - a.stats.best);
+  else if (_lbFilter === 'avg') ranked.sort((a,b) => b.stats.avg - a.stats.avg);
+  else ranked.sort((a,b) => {
+    const getImprovement = s => {
+      const sorted = [...s.attempts].sort((x,y)=>x.timestamp-y.timestamp);
+      if (sorted.length < 2) return 0;
+      return sorted[sorted.length-1].score - sorted[0].score;
+    };
+    return getImprovement(b) - getImprovement(a);
+  });
+
+  const el = document.getElementById('leaderboardFull');
+  if (!ranked.length) {
+    el.innerHTML = '<div class="empty" style="padding:48px;"><div class="empty-icon">🏆</div><div class="empty-title">No data yet</div></div>';
+    return;
+  }
+  const medals = {0:'🥇',1:'🥈',2:'🥉'};
+  const rankColors = {0:'gold',1:'silver',2:'bronze'};
+  const scoreField = _lbFilter === 'best' ? 'best' : _lbFilter === 'avg' ? 'avg' : null;
+
+  el.innerHTML = `<table class="data-table">
+    <thead><tr>
+      <th>Rank</th><th>Student</th><th>${_lbFilter==='improvement'?'Improvement':'Score'}</th>
+      <th>Tests</th><th>Best</th><th>Avg</th><th>Time</th>
+    </tr></thead>
+    <tbody>
+    ${ranked.map((s,i) => {
+      const improvement = (() => {
+        const sorted = [...s.attempts].sort((x,y)=>x.timestamp-y.timestamp);
+        if (sorted.length < 2) return 0;
+        return sorted[sorted.length-1].score - sorted[0].score;
+      })();
+      const displayScore = scoreField ? `<span class="score-badge ${scoreBadgeClass(s.stats[scoreField])}">${s.stats[scoreField]}%</span>`
+        : `<span style="font-family:var(--mono);font-weight:700;color:${improvement>=0?'#34D399':'#FB7185'};">${improvement>=0?'+':''}${improvement}%</span>`;
+      return `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;">
+            ${medals[i] ? `<span style="font-size:18px;">${medals[i]}</span>` : ''}
+            <span class="lb-rank ${rankColors[i]||''}" style="font-size:14px;">${medals[i]?'':i+1}</span>
+          </div>
+        </td>
+        <td>
+          <div class="student-cell">
+            <div class="avatar" style="background:${avatarColor(s.email)};">${initials(s.name)}</div>
+            <div>
+              <div class="student-name">${s.name}</div>
+              <div class="student-email">${s.email}</div>
+            </div>
+          </div>
+        </td>
+        <td>${displayScore}</td>
+        <td style="font-family:var(--mono);font-size:13px;">${s.stats.count}</td>
+        <td><span class="score-badge ${scoreBadgeClass(s.stats.best)}">${s.stats.best}%</span></td>
+        <td><span class="score-badge ${scoreBadgeClass(s.stats.avg)}">${s.stats.avg}%</span></td>
+        <td style="font-size:12px;color:var(--muted);font-family:var(--mono);">${formatTime(s.stats.totalTime)}</td>
+      </tr>`;
+    }).join('')}
+    </tbody>
+  </table>`;
+}
+
+function renderTopicFull(allAttempts) {
+  const el = document.getElementById('topicFull');
+  if (!allAttempts.length) {
+    el.innerHTML = '<div class="topic-card" style="grid-column:1/-1;"><div class="empty" style="padding:20px;"><div class="empty-icon">📐</div><div class="empty-title">No topic data yet</div></div></div>';
+    return;
+  }
+  const topics = computeTopicStats(allAttempts);
+  if (!topics.length) { el.innerHTML = '<div class="topic-card" style="grid-column:1/-1;"><div class="empty" style="padding:20px;"><div class="empty-icon">📐</div><div class="empty-title">No per-question data recorded yet</div></div></div>'; return; }
+  el.innerHTML = topics.map(t => `
+    <div class="topic-card">
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-stats">
+        <div class="topic-pct" style="color:${t.pct>=70?'#34D399':t.pct>=50?'#2DD4BF':'#FB7185'};font-size:22px;">${t.pct}%</div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;font-weight:700;color:#fff;">${t.correct}/${t.total}</div>
+          <div class="topic-count">correct</div>
+        </div>
+      </div>
+      <div class="progress-bar" style="height:8px;"><div class="progress-fill ${progressColor(t.pct)}" style="width:${t.pct}%"></div></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;">
+        ${t.pct>=70?'✅ Strong — keep it up':t.pct>=50?'⚡ Good — room to improve':'⚠️ Needs attention'}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTestPage(testId, studentList, elId) {
+  const testAttempts = studentList.flatMap(s => s.attempts.filter(a=>a.testId===testId).map(a=>({...a,studentName:s.name})));
+  const el = document.getElementById(elId);
+  if (!testAttempts.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div><div class="empty-title">No attempts yet</div></div>`;
+    return;
+  }
+  const scores = testAttempts.map(a=>a.score);
+  const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  const best = Math.max(...scores);
+  el.innerHTML = `
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px;">
+      <div class="stat-card teal"><div class="stat-label">Total Attempts</div><div class="stat-value">${testAttempts.length}</div></div>
+      <div class="stat-card gold"><div class="stat-label">Average Score</div><div class="stat-value">${avg}%</div></div>
+      <div class="stat-card green"><div class="stat-label">Best Score</div><div class="stat-value">${best}%</div></div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Student</th><th>Score</th><th>Correct</th><th>Wrong</th><th>Time</th><th>Date</th></tr></thead>
+        <tbody>${testAttempts.sort((a,b)=>b.timestamp-a.timestamp).map(a=>`
+          <tr>
+            <td><div style="font-weight:600;font-size:13px;color:#fff;">${a.studentName}</div></td>
+            <td><span class="score-badge ${scoreBadgeClass(a.score)}">${a.score}%</span></td>
+            <td style="color:#34D399;font-family:var(--mono);">${a.correct||'—'}</td>
+            <td style="color:#FB7185;font-family:var(--mono);">${a.wrong||'—'}</td>
+            <td style="font-family:var(--mono);font-size:12px;color:var(--muted);">${formatTime(a.timeUsed)}</td>
+            <td style="font-size:11px;color:var(--muted);">${new Date(a.timestamp).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// DRAWER
+// ═══════════════════════════════════════════════════════════
+async function openDrawer(email) {
+  const data = await loadAllData();
+  const student = data[email];
+  if (!student) return;
+  const stats = computeStudentStats(student.attempts);
+  document.getElementById('drawerTitle').textContent = student.name;
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('studentDrawer').classList.add('open');
+
+  const sorted = [...student.attempts].sort((a,b)=>b.timestamp-a.timestamp);
+  document.getElementById('drawerContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+      <div class="avatar" style="background:${avatarColor(email)};width:52px;height:52px;font-size:20px;border-radius:14px;">${initials(student.name)}</div>
+      <div>
+        <div style="font-size:17px;font-weight:800;color:#fff;">${student.name}</div>
+        <div style="font-size:12px;color:var(--muted);">${email}</div>
+        <div style="margin-top:4px;">${student.tier==='premium'?'<span class="tag tag-premium">Premium</span>':'<span class="tag tag-free">Free</span>'}</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Best</div>
+        <div style="font-size:22px;font-weight:800;color:#34D399;">${stats.best}%</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Avg</div>
+        <div style="font-size:22px;font-weight:800;color:var(--teal2);">${stats.avg}%</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Tests</div>
+        <div style="font-size:22px;font-weight:800;color:#fff;">${stats.count}</div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Attempt History</div>
+      ${sorted.map((a,i) => `
+        <div class="attempt-row">
+          <div class="attempt-num">${sorted.length-i}</div>
+          <div class="attempt-test">${a.testId==='t1'?'Section 1 · Easy':a.testId==='t2'?'Section 2 · Medium':a.testId==='set1'?'ETS Official · Set 1':a.testId}</div>
+          <div class="attempt-score" style="color:${a.score>=60?'#34D399':a.score>=40?'#FCD34D':'#FB7185'};">${a.score}%</div>
+          <div class="attempt-time">${formatTime(a.timeUsed)}</div>
+          <div style="font-size:10px;color:var(--muted);">${new Date(a.timestamp).toLocaleDateString('en-NG',{day:'numeric',month:'short'})}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div style="margin-top:20px;display:flex;gap:8px;">
+      <button onclick="togglePremium('${email}')" style="flex:1;background:rgba(139,92,246,0.15);border:1px solid #7C3AED;border-radius:8px;padding:10px;font-size:12px;color:#A78BFA;cursor:pointer;font-family:var(--sans);font-weight:600;">
+        ${student.tier==='premium'?'↓ Move to Free':'↑ Upgrade to Premium'}
+      </button>
+    </div>
+  `;
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('studentDrawer').classList.remove('open');
+}
+
+async function togglePremium(email) {
+  try {
+    const data = await loadAllData();
+    const student = data[email];
+    if (!student) return;
+    const newTier = student.tier === "premium" ? "free" : "premium";
+    const emailKey = email.replace(/[.#$[\]]/g, "-");
+    await db.update("students/" + emailKey, { tier: newTier });
+    closeDrawer();
+    renderAll();
+  } catch(e) { console.error("togglePremium error:", e); }
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════════════════
+function showPage(page) {
+  document.querySelectorAll('[id^="page-"]').forEach(el=>el.style.display='none');
+  document.getElementById(`page-${page}`).style.display='block';
+  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
+  currentPage = page;
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT CSV
+// ═══════════════════════════════════════════════════════════
+async function exportCSV() {
+  const data = await loadAllData();
+  const rows = [['Name','Email','Tier','Test','Score','Correct','Wrong','TimeUsed(s)','Date']];
+  for (const s of Object.values(data)) {
+    for (const a of s.attempts) {
+      rows.push([s.name, s.email, s.tier||'free', a.testId==='t1'?'Section1-Easy':a.testId==='t2'?'Section2-Medium':a.testId==='set1'?'ETS-Set1':a.testId, a.score, a.correct||'', a.wrong||'', a.timeUsed||'', new Date(a.timestamp).toISOString().split('T')[0]]);
+    }
+  }
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='freestudy_results.csv'; a.click();
+}
+
+async function clearData() {
+  if (!confirm("Clear ALL student data? This cannot be undone.")) return;
+  try {
+    await db.delete("results");
+    await db.delete("students");
+    renderAll();
+  } catch(e) { console.error("clearData error:", e); }
+}
+
+// ── INIT ──
+FSHAuth.gate({ role: 'teacher' }).then(function(ctx){
+  // sign-out button (top-right)
+  var b = document.createElement('button');
+  b.textContent = 'Sign out';
+  b.style.cssText = 'position:fixed;top:14px;right:16px;z-index:9999;height:34px;padding:0 14px;border-radius:9px;border:1.5px solid #CBD5E1;background:#fff;color:#1E293B;font:600 13px/1 "DM Sans",sans-serif;cursor:pointer;';
+  b.onclick = function(){ FSHAuth.signOut().then(function(){ location.href='index.html'; }); };
+  document.body.appendChild(b);
+  renderAll();
+  setInterval(renderAll, 30000); // auto-refresh every 30s
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "role": {
+          ".validate": "newData.val() === 'student'"
+        }
+      }
+    },
+
+    "results": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'",
+      "$emailKey": {
+        ".read": "auth != null",
+        "$testId": {
+          "$ts": {
+            ".write": "auth != null",
+            ".validate": "newData.child('email').val() === auth.token.email"
+          }
+        }
+      }
+    },
+
+    "students": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'",
+      "$emailKey": {
+        ".write": "auth != null",
+        ".validate": "newData.child('email').val() === auth.token.email"
+      }
+    },
+
+    "classes": {
+      ".read": "auth != null",
+      "$classId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher' && (!data.exists() || data.child('teacherId').val() === auth.uid || newData.child('teacherId').val() === auth.uid)"
+      }
+    },
+
+    "roster": {
+      "$classId": {
+        ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'",
+        "$emailKey": {
+          ".write": "auth != null",
+          ".validate": "!newData.exists() || newData.child('email').val() === auth.token.email || root.child('users').child(auth.uid).child('role').val() === 'teacher'"
+        }
+      }
+    },
+
+    "studentClass": {
+      ".read": "auth != null",
+      "$emailKey": {
+        ".write": "auth != null"
+      }
+    },
+
+    "mocks": {
+      ".read": "auth != null",
+      "$mockId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
+      }
+    },
+
+    "assignments": {
+      ".read": "auth != null",
+      "$asgId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
+      }
+    },
+
+    "resources": {
+      ".read": "auth != null",
+      "$resId": {
+        ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'"
+      }
+    },
+
+    "engagement": {
+      ".read": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'teacher'",
+      "$emailKey": {
+        ".read": "auth != null",
+        "$resId": {
+          ".write": "auth != null",
+          ".validate": "newData.child('email').val() === auth.token.email"
+        }
+      }
+    }
+  }
+}
